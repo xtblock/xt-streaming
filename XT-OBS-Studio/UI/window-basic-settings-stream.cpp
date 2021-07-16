@@ -20,8 +20,9 @@ extern QCef *cef;
 extern QCefCookieManager *panel_cookies;
 
 enum class ListOpt : int {
-	ShowAll = 1,
-	Custom,
+	ShowAll = 2,
+	Custom = 0,
+	Xtstream = 1,
 };
 
 enum class Section : int {
@@ -31,7 +32,8 @@ enum class Section : int {
 
 inline bool OBSBasicSettings::IsCustomService() const
 {
-	return ui->service->currentData().toInt() == (int)ListOpt::Custom;
+	return ui->service->currentData().toInt() == (int)ListOpt::Custom ||
+	       ui->service->currentData().toInt() == (int)ListOpt::Xtstream;
 }
 
 void OBSBasicSettings::InitStreamPage()
@@ -354,6 +356,9 @@ void OBSBasicSettings::LoadServices(bool showAll)
 			QTStr("Basic.AutoConfig.StreamPage.Service.ShowAll"),
 			QVariant((int)ListOpt::ShowAll));
 	}
+	ui->service->insertItem(
+		0, QTStr("Basic.AutoConfig.StreamPage.Service.Xtstream"),
+		QVariant((int)ListOpt::Xtstream));
 
 	ui->service->insertItem(
 		0, QTStr("Basic.AutoConfig.StreamPage.Service.Custom"),
