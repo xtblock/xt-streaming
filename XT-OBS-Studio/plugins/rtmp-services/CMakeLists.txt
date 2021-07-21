@@ -14,6 +14,7 @@ set(rtmp-services_SOURCES
 	service-specific/dacast.c
 	rtmp-common.c
 	rtmp-custom.c
+	xtstream-custom.c
 	rtmp-services-main.c)
 
 if(WIN32)

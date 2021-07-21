@@ -21,8 +21,8 @@ extern QCefCookieManager *panel_cookies;
 
 enum class ListOpt : int {
 	ShowAll = 2,
-	Custom = 0,
-	Xtstream = 1,
+	Custom =0,
+	Xt = 1,
 };
 
 enum class Section : int {
@@ -32,8 +32,11 @@ enum class Section : int {
 
 inline bool OBSBasicSettings::IsCustomService() const
 {
-	return ui->service->currentData().toInt() == (int)ListOpt::Custom ||
-	       ui->service->currentData().toInt() == (int)ListOpt::Xtstream;
+	return ui->service->currentData().toInt() == (int)ListOpt::Custom;
+}
+inline bool OBSBasicSettings::IsXtService() const
+{
+	return ui->service->currentData().toInt() == (int)ListOpt::Xt;
 }
 
 void OBSBasicSettings::InitStreamPage()
@@ -81,11 +84,15 @@ void OBSBasicSettings::InitStreamPage()
 		SLOT(UpdateResFPSLimits()));
 	connect(ui->customServer, SIGNAL(textChanged(const QString &)), this,
 		SLOT(UpdateKeyLink()));
+			connect(ui->xtServer, SIGNAL(textChanged(const QString &)), this,
+		SLOT(UpdateKeyLink()));
 	connect(ui->ignoreRecommended, SIGNAL(clicked(bool)), this,
 		SLOT(DisplayEnforceWarning(bool)));
 	connect(ui->ignoreRecommended, SIGNAL(toggled(bool)), this,
 		SLOT(UpdateResFPSLimits()));
 	connect(ui->customServer, SIGNAL(editingFinished(const QString &)),
+		this, SLOT(UpdateKeyLink()));
+		connect(ui->xtServer, SIGNAL(editingFinished(const QString &)),
 		this, SLOT(UpdateKeyLink()));
 	connect(ui->service, SIGNAL(currentIndexChanged(int)), this,
 		SLOT(UpdateMoreInfoLink()));
@@ -119,7 +126,22 @@ void OBSBasicSettings::LoadStream1Settings()
 		ui->authUsername->setText(QT_UTF8(username));
 		ui->authPw->setText(QT_UTF8(password));
 		ui->useAuth->setChecked(use_auth);
-	} else {
+	}else if(strcmp(type, "xtstream_custom") == 0) {
+		ui->service->setCurrentIndex(0);
+		ui->xtServer->setText(server);
+
+		// bool use_auth = obs_data_get_bool(settings, "use_auth");
+		// const char *username =
+		// 	obs_data_get_string(settings, "username");
+		// const char *password =
+		// 	obs_data_get_string(settings, "password");
+		// ui->authUsername->setText(QT_UTF8(username));
+		// ui->authPw->setText(QT_UTF8(password));
+		// ui->useAuth->setChecked(use_auth);
+	}
+	
+	
+	else {
 		int idx = ui->service->findText(service);
 		if (idx == -1) {
 			if (service && *service)
@@ -171,9 +193,12 @@ void OBSBasicSettings::LoadStream1Settings()
 }
 
 void OBSBasicSettings::SaveStream1Settings()
-{
+{   bool xtServer = IsXtService();
 	bool customServer = IsCustomService();
-	const char *service_id = customServer ? "rtmp_custom" : "rtmp_common";
+
+	
+	// const char *service_id = customServer ? "rtmp_custom" : "rtmp_common";
+	 const char *service_id = customServer ? "rtmp_custom" : xtServer ? "xtstream_custom" : "rtmp_common";
 
 	obs_service_t *oldService = main->GetService();
 	OBSData hotkeyData = obs_hotkeys_save_service(oldService);
@@ -188,7 +213,24 @@ void OBSBasicSettings::SaveStream1Settings()
 		obs_data_set_string(
 			settings, "server",
 			QT_TO_UTF8(ui->server->currentData().toString()));
-	} else {
+	} 
+	else if(xtServer){
+		obs_data_set_string(settings, "server",
+				    QT_TO_UTF8(ui->xtServer->text()));
+		// obs_data_set_bool(settings, "use_auth",
+		// 		  ui->useAuth->isChecked());
+		// if (ui->useAuth->isChecked()) {
+		// 	obs_data_set_string(
+		// 		settings, "username",
+		// 		QT_TO_UTF8(ui->authUsername->text()));
+		// 	obs_data_set_string(settings, "password",
+		// 			    QT_TO_UTF8(ui->authPw->text()));
+		// }
+
+	}
+	
+	
+	else {
 		obs_data_set_string(settings, "server",
 				    QT_TO_UTF8(ui->customServer->text()));
 		obs_data_set_bool(settings, "use_auth",
@@ -244,6 +286,9 @@ void OBSBasicSettings::UpdateMoreInfoLink()
 	if (IsCustomService()) {
 		ui->moreInfoButton->hide();
 		return;
+	}else if(IsXtService()){
+		ui->moreInfoButton->hide();
+		return;
 	}
 
 	QString serviceName = ui->service->currentText();
@@ -272,6 +317,7 @@ void OBSBasicSettings::UpdateKeyLink()
 {
 	QString serviceName = ui->service->currentText();
 	QString customServer = ui->customServer->text();
+	QString xtServer = ui->xtServer->text();
 	QString streamKeyLink;
 	if (serviceName == "Twitch") {
 		streamKeyLink = "https://dashboard.twitch.tv/settings/stream";
@@ -356,13 +402,13 @@ void OBSBasicSettings::LoadServices(bool showAll)
 			QTStr("Basic.AutoConfig.StreamPage.Service.ShowAll"),
 			QVariant((int)ListOpt::ShowAll));
 	}
-	ui->service->insertItem(
-		0, QTStr("Basic.AutoConfig.StreamPage.Service.Xtstream"),
-		QVariant((int)ListOpt::Xtstream));
 
 	ui->service->insertItem(
 		0, QTStr("Basic.AutoConfig.StreamPage.Service.Custom"),
 		QVariant((int)ListOpt::Custom));
+		ui->service->insertItem(
+		0, QTStr("Basic.AutoConfig.StreamPage.Service.Xt"),
+		QVariant((int)ListOpt::Xt));
 
 	if (!lastService.isEmpty()) {
 		int idx = ui->service->findText(lastService);
@@ -389,6 +435,7 @@ void OBSBasicSettings::on_service_currentIndexChanged(int)
 
 	std::string service = QT_TO_UTF8(ui->service->currentText());
 	bool custom = IsCustomService();
+	bool xt = IsXtService();
 
 	ui->disconnectAccount->setVisible(false);
 	ui->bandwidthTestEnable->setVisible(false);
@@ -430,7 +477,16 @@ void OBSBasicSettings::on_service_currentIndexChanged(int)
 		ui->serverStackedWidget->setVisible(true);
 		ui->serverLabel->setVisible(true);
 		on_useAuth_toggled();
-	} else {
+	}else if(xt){
+		ui->streamkeyPageLayout->insertRow(1, ui->serverLabel,
+						   ui->serverStackedWidget);
+
+		ui->serverStackedWidget->setCurrentIndex(1);
+		ui->serverStackedWidget->setVisible(true);
+		ui->serverLabel->setVisible(true);
+	} 
+	
+	else {
 		ui->serverStackedWidget->setCurrentIndex(0);
 	}
 
@@ -505,9 +561,10 @@ void OBSBasicSettings::on_authPwShow_clicked()
 }
 
 OBSService OBSBasicSettings::SpawnTempService()
-{
+{	bool xt = IsXtService();
 	bool custom = IsCustomService();
-	const char *service_id = custom ? "rtmp_custom" : "rtmp_common";
+	// const char *service_id = custom ? "rtmp_custom" : "rtmp_common";
+const char *service_id = custom ? "rtmp_custom" : xt ? "xtstream_custom" : "rtmp_common";
 
 	OBSData settings = obs_data_create();
 	obs_data_release(settings);
@@ -518,7 +575,12 @@ OBSService OBSBasicSettings::SpawnTempService()
 		obs_data_set_string(
 			settings, "server",
 			QT_TO_UTF8(ui->server->currentData().toString()));
-	} else {
+	}else if (xt) {
+		obs_data_set_string(settings, "server",
+				    QT_TO_UTF8(ui->xtServer->text()));
+	} 
+	
+	else {
 		obs_data_set_string(settings, "server",
 				    QT_TO_UTF8(ui->customServer->text()));
 	}
@@ -647,10 +709,16 @@ void OBSBasicSettings::UpdateVodTrackSetting()
 {
 	bool enableForCustomServer = config_get_bool(
 		GetGlobalConfig(), "General", "EnableCustomServerVodTrack");
+		bool enableForXtServer = config_get_bool(
+		GetGlobalConfig(), "General", "EnableXtServerVodTrack");
+	
 	bool enableVodTrack = ui->service->currentText() == "Twitch";
 	bool wasEnabled = !!vodTrackCheckbox;
+		
 
 	if (enableForCustomServer && IsCustomService())
+		enableVodTrack = true;
+		if (enableForXtServer && IsXtService())
 		enableVodTrack = true;
 
 	if (enableVodTrack == wasEnabled)
@@ -736,10 +804,12 @@ OBSService OBSBasicSettings::GetStream1Service()
 }
 
 void OBSBasicSettings::UpdateServiceRecommendations()
-{
+{	bool xtServer = IsXtService();
 	bool customServer = IsCustomService();
 	ui->ignoreRecommended->setVisible(!customServer);
 	ui->enforceSettingsLabel->setVisible(!customServer);
+	ui->ignoreRecommended->setVisible(!xtServer);
+	ui->enforceSettingsLabel->setVisible(!xtServer);
 
 	OBSService service = GetStream1Service();
 
