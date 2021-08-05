@@ -4,7 +4,8 @@ const {
   parentPort,
   workerData,
 } = require('worker_threads');
-
+const path = require('path');
+const savePath = path.join(__dirname, '../media');
 if (isMainThread) {
   const videoSizes = ['1920x1080', '1280x720', '640x360'];
   videoSizes.forEach(async function (size) {
@@ -40,7 +41,7 @@ if (isMainThread) {
     'h264',
     '-f',
     'hls',
-    `media/${inputData.size}.m3u8`,
+    `${savePath}/${inputData.size}.m3u8`,
   ];
   var proc = spawn(cmd, args);
   proc.stdout.on('data', function (data) {

@@ -7,7 +7,7 @@ class RouterConfig {
     public static routes(router: any, io?:any): any {
         router.get("/", MainController.index);
         router.get("/videos", MainController.videos);
-        router.get("/stream", MainController.stream);
+        router.get("/stream/:key/:quality", MainController.stream);
         router.get("/:resource", MainController.resource);
         //router.get("/socket.io", MainController.stream);
         router.get("/test", MainController.encode(io));

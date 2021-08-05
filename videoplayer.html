@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Video Streaming Test</title>
+  <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet" />
+  
+</head>
+<script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
+<!-- <script src="https://unpkg.com/browse/@videojs/http-streaming@2.8.0/dist/videojs-http-streaming.min.js"></script> -->
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script> -->
+
+
+
+
+<body>
+  <h1>Video Playback hls</h1>
+  <video id="my-video" controls preload="auto"  
+  class="video-js"  
+  type="application/x-mpegURL"
+  width="640" height="264" 
+  data-setup='{"controls": true, "autoplay": false, "preload": "auto", "liveui" : "true"}' autoplay>
+  <source src="http://localhost:4000/videos/1280x720.m3u8" type="application/x-mpegURL"/>
+  </video>
+  
+  <button onclick=clicked(sd)>SD</button>
+  <button onclick=clicked(fullHd)>Full Hd</button>
+  <button onclick=clicked(Hd)>HD</button>
+  <!-- <video id="video" width="640" class="video-js vjs-theme-city" 
+  height="264" ></video> -->
+  <script>
+    function clicked(value){
+        var source = document.getElementsByTagName('source')[0];
+        source.src = value;
+    }
+</script>
+<script>
+var fullHd ="http://localhost:4000/videos/1920x1080.m3u8";
+var sd ="http://localhost:4000/videos/640x360.m3u8";
+var Hd ="http://localhost:4000/videos/1280x720.m3u8";
+
+
+</script>
+<script>
+  
+
+
+
+
+  
+     
+  const player = videojs('my-video'  );
+
+
+</script>
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as path from 'path';
-import ffmpegService from 'services/ffmpeg.service';
-import FFmpegService from 'services/ffmpeg.service';
+import httpService from 'services/http.service';
+
 const fs = require('fs');
 
 export class MainController {
@@ -78,7 +78,8 @@ export class MainController {
     next: NextFunction
   ) => {
     try {
-      await ffmpegService.create();
+      console.log(req.params.key, req.params.quality);
+     // await httpService.create();
       /*  const encodePath = path.join(__dirname, 'encode.sh');
       const videoPath = 'tcp://localhost:8000';
       const mediaPath = path.join(__dirname, 'media');
@@ -93,7 +94,8 @@ export class MainController {
           console.log('stdout-encode SUCCESS,');
         }
       ); */
-
+      console.log(__dirname);
+      res.sendFile(path.join(__dirname, `../../${req.params.key}/${req.params.quality}`));
       //res.status(200).send("in prog");
     } catch (err) {
       next(err);
