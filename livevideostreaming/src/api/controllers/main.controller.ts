@@ -94,6 +94,34 @@ export class MainController {
           console.log('stdout-encode SUCCESS,');
         }
       ); */
+
+     const dir='../media'
+      if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir, { recursive: true });
+
+console.log('File Reading from file.txt ..........');
+
+// ReadFile method is used to read the content from file.txt
+fs.readFile('../master.m3u8','utf8',readingFile);
+
+function readingFile(error,data)
+{
+	if(error){
+		console.log(error);
+	} 
+		fs.writeFile('../media/master.m3u8',data,'utf8',writeFile);
+	}
+}
+
+function writeFile(error){
+	if(error){
+		console.log(error)
+	}
+
+}
+
+
+  
       console.log(__dirname);
       res.sendFile(path.join(__dirname, `../../${req.params.key}/${req.params.quality}`));
       //res.status(200).send("in prog");
