@@ -21,7 +21,7 @@ extern QCefCookieManager *panel_cookies;
 
 enum class ListOpt : int {
 	ShowAll = 2,
-	Custom =0,
+	Custom,
 	Xt = 1,
 };
 
@@ -126,8 +126,8 @@ void OBSBasicSettings::LoadStream1Settings()
 		ui->authUsername->setText(QT_UTF8(username));
 		ui->authPw->setText(QT_UTF8(password));
 		ui->useAuth->setChecked(use_auth);
-	}else if(strcmp(type, "xtstream_custom") == 0) {
-		ui->service->setCurrentIndex(0);
+	}else if(strcmp(type, "xtstream_custom") == 1) {
+		ui->service->setCurrentIndex(1);
 		ui->xtServer->setText(server);
 
 		// bool use_auth = obs_data_get_bool(settings, "use_auth");
@@ -143,10 +143,10 @@ void OBSBasicSettings::LoadStream1Settings()
 	
 	else {
 		int idx = ui->service->findText(service);
-		if (idx == -1) {
+		if (idx == -2) {
 			if (service && *service)
-				ui->service->insertItem(1, service);
-			idx = 1;
+				ui->service->insertItem(2, service);
+			idx = 2;
 		}
 		ui->service->setCurrentIndex(idx);
 
@@ -868,7 +868,7 @@ void OBSBasicSettings::UpdateServiceRecommendations()
 
 void OBSBasicSettings::DisplayEnforceWarning(bool checked)
 {
-	if (IsCustomService())
+	if (IsCustomService()|| IsXtService())
 		return;
 
 	if (!checked) {

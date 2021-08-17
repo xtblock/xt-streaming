@@ -673,7 +673,7 @@ obs-build-main() {
     GIT_BRANCH=$(/usr/bin/git rev-parse --abbrev-ref HEAD)
     GIT_HASH=$(/usr/bin/git rev-parse --short HEAD)
     GIT_TAG=$(/usr/bin/git describe --tags --abbrev=0)
-    FILE_NAME="SV-${GIT_TAG}-${GIT_HASH}-macOS.dmg"
+    FILE_NAME="OBS-macOS.dmg"
 
     ##########################################################################
     # IMPORTANT:
