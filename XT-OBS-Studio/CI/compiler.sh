@@ -37,11 +37,11 @@ set -x
 PRODUCT_NAME="OBS-Studio"
 
 CHECKOUT_DIR="$(/usr/bin/git rev-parse --show-toplevel)"
-DEPS_BUILD_DIR="${CHECKOUT_DIR}/../obs-build-dependencies"
+DEPS_BUILD_DIR="${CHECKOUT_DIR}/obs-build-dependencies"
 BUILD_DIR="${BUILD_DIR:-build}"
 BUILD_CONFIG=${BUILD_CONFIG:-RelWithDebInfo}
-CI_SCRIPTS="${CHECKOUT_DIR}/CI/scripts/macos"
-CI_WORKFLOW="${CHECKOUT_DIR}/.github/workflows/main.yml"
+CI_SCRIPTS="${CHECKOUT_DIR}/XT-OBS-Studio/CI/scripts/macos"
+CI_WORKFLOW="${CHECKOUT_DIR}/XT-OBS-Studio/.github/workflows/main.yml"
 CI_MACOS_CEF_VERSION=$(/bin/cat "${CI_WORKFLOW}" | /usr/bin/sed -En "s/[ ]+MACOS_CEF_BUILD_VERSION: '([0-9]+)'/\1/p")
 CI_DEPS_VERSION=$(/bin/cat "${CI_WORKFLOW}" | /usr/bin/sed -En "s/[ ]+MACOS_DEPS_VERSION: '([0-9\-]+)'/\1/p")
 CI_VLC_VERSION=$(/bin/cat "${CI_WORKFLOW}" | /usr/bin/sed -En "s/[ ]+VLC_VERSION: '([0-9\.]+)'/\1/p")
@@ -105,7 +105,7 @@ ensure_dir() {
 }
 
 cleanup() {
-    /bin/rm -rf "${CHECKOUT_DIR}/${BUILD_DIR}/settings.json"
+    /bin/rm -rf "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}/settings.json"
     unset CODESIGN_IDENT
     unset CODESIGN_IDENT_USER
     unset CODESIGN_IDENT_PASS
@@ -144,7 +144,8 @@ install_homebrew_deps() {
         brew untap local/python2
     fi
 
-    brew bundle --file "./CI/scripts/macos/Brewfile"
+        brew bundle --file "${CI_SCRIPTS}/Brewfile"
+
 
     check_curl
 }
@@ -251,7 +252,7 @@ install_dmgbuild() {
 
 ## OBS BUILD FROM SOURCE ##
 configure_obs_build() {
-    ensure_dir "${CHECKOUT_DIR}/${BUILD_DIR}"
+    ensure_dir "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}"
 
     # CUR_DATE=$(/bin/date +"%Y-%m-%d@%H%M%S")
     # NIGHTLY_DIR="${CHECKOUT_DIR}/nightly-${CUR_DATE}"
@@ -262,14 +263,14 @@ configure_obs_build() {
     #     /bin/mv "../${BUILD_DIR}/OBS.app" .
     #     info "You can find OBS.app in ${NIGHTLY_DIR}"
     # fi
-    # ensure_dir "${CHECKOUT_DIR}/${BUILD_DIR}"
+    # ensure_dir "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}"
     # if ([ -n "${PACKAGE_NAME}" ] && [ -f ${PACKAGE_NAME} ]); then
     #     ensure_dir "${NIGHTLY_DIR}"
     #     /bin/mv "../${BUILD_DIR}/$(basename "${PACKAGE_NAME}")" .
     #     info "You can find ${PACKAGE_NAME} in ${NIGHTLY_DIR}"
     # fi
 
-    # ensure_dir "${CHECKOUT_DIR}/${BUILD_DIR}"
+    # ensure_dir "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}"
 
     hr "Run CMAKE for OBS..."
     cmake -DENABLE_SPARKLE_UPDATER=ON \
@@ -288,14 +289,14 @@ configure_obs_build() {
 }
 
 run_obs_build() {
-    ensure_dir "${CHECKOUT_DIR}/${BUILD_DIR}"
+    ensure_dir "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}"
     hr "Build OBS..."
     /usr/bin/make -j${NPROC}
 }
 
 ## OBS BUNDLE AS MACOS APPLICATION ##
 bundle_dylibs() {
-    ensure_dir "${CHECKOUT_DIR}/${BUILD_DIR}"
+    ensure_dir "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}"
 
     if [ ! -d ./OBS.app ]; then
         error "No OBS.app bundle found"
@@ -364,7 +365,7 @@ bundle_dylibs() {
 }
 
 install_frameworks() {
-    ensure_dir "${CHECKOUT_DIR}/${BUILD_DIR}"
+    ensure_dir "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}"
 
     if [ ! -d ./OBS.app ]; then
         error "No OBS.app bundle found"
@@ -377,7 +378,7 @@ install_frameworks() {
 }
 
 prepare_macos_bundle() {
-    ensure_dir "${CHECKOUT_DIR}/${BUILD_DIR}"
+    ensure_dir "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}"
 
     if [ ! -d ./rundir/${BUILD_CONFIG}/bin ]; then
         error "No OBS build found"
@@ -429,7 +430,7 @@ prepare_macos_bundle() {
 
 ## CREATE MACOS DISTRIBUTION AND INSTALLER IMAGE ##
 prepare_macos_image() {
-    ensure_dir "${CHECKOUT_DIR}/${BUILD_DIR}"
+    ensure_dir "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}"
 
     if [ ! -d ./OBS.app ]; then
         error "No OBS.app bundle found"
@@ -499,7 +500,7 @@ read_codesign_pass() {
 codesign_bundle() {
     if [ ! -n "${CODESIGN_OBS}" ]; then step "Skipping application bundle code signing"; return; fi
 
-    ensure_dir "${CHECKOUT_DIR}/${BUILD_DIR}"
+    ensure_dir "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}"
     trap "caught_error 'code-signing app'" ERR
 
     if [ ! -d ./OBS.app ]; then
@@ -558,7 +559,7 @@ codesign_bundle() {
 codesign_image() {
     if [ ! -n "${CODESIGN_OBS}" ]; then step "Skipping installer image code signing"; return; fi
 
-    ensure_dir "${CHECKOUT_DIR}/${BUILD_DIR}"
+    ensure_dir "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}"
     trap "caught_error 'code-signing image'" ERR
 
     if [ ! -f "${FILE_NAME}" ]; then
@@ -630,7 +631,7 @@ notarize_macos() {
     hr "Notarizing OBS for macOS"
     trap "caught_error 'notarizing app'" ERR
 
-    ensure_dir "${CHECKOUT_DIR}/${BUILD_DIR}"
+    ensure_dir "${CHECKOUT_DIR}/XT-OBS-Studio/${BUILD_DIR}"
 
     if [ -f "${FILE_NAME}" ]; then
         NOTARIZE_TARGET="${FILE_NAME}"
