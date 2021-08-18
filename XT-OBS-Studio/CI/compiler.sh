@@ -144,7 +144,7 @@ install_homebrew_deps() {
         brew untap local/python2
     fi
 
-    brew bundle --file "${CI_SCRIPTS}/Brewfile"
+    brew bundle --file "./CI/scripts/macos/Brewfile"
 
     check_curl
 }
@@ -670,9 +670,9 @@ obs-build-main() {
     check_macos_version
     step "Fetching OBS tags..."
     # /usr/bin/git fetch origin --tags
-    GIT_BRANCH=$(/usr/bin/git rev-parse --abbrev-ref HEAD)
-    GIT_HASH=$(/usr/bin/git rev-parse --short HEAD)
-    GIT_TAG=$(/usr/bin/git describe --tags --abbrev=0)
+    # GIT_BRANCH=$(/usr/bin/git rev-parse --abbrev-ref HEAD)
+    # GIT_HASH=$(/usr/bin/git rev-parse --short HEAD)
+    # GIT_TAG=$(/usr/bin/git describe --tags --abbrev=0)
     FILE_NAME="OBS-macOS.dmg"
 
     ##########################################################################
