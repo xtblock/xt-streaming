@@ -20,9 +20,9 @@ extern QCef *cef;
 extern QCefCookieManager *panel_cookies;
 
 enum class ListOpt : int {
-	ShowAll = 2,
+	ShowAll = 1,
 	Custom,
-	Xt = 1,
+	Xt,
 };
 
 enum class Section : int {
@@ -126,9 +126,9 @@ void OBSBasicSettings::LoadStream1Settings()
 		ui->authUsername->setText(QT_UTF8(username));
 		ui->authPw->setText(QT_UTF8(password));
 		ui->useAuth->setChecked(use_auth);
-	}else if(strcmp(type, "xtstream_custom") == 1) {
-		ui->service->setCurrentIndex(1);
-		ui->xtServer->setText(server);
+	}else if(strcmp(type, "xtstream_custom") == 0) {
+		ui->service->setCurrentIndex(0);
+		ui->customServer->setText(server);
 
 		// bool use_auth = obs_data_get_bool(settings, "use_auth");
 		// const char *username =
@@ -198,7 +198,9 @@ void OBSBasicSettings::SaveStream1Settings()
 
 	
 	// const char *service_id = customServer ? "rtmp_custom" : "rtmp_common";
-	 const char *service_id = customServer ? "rtmp_custom" : xtServer ? "xtstream_custom" : "rtmp_common";
+	 const char *service_id = customServer ? "rtmp_custom" 
+	 : xtServer ? "xtstream_custom" 
+	 : "rtmp_common";
 
 	obs_service_t *oldService = main->GetService();
 	OBSData hotkeyData = obs_hotkeys_save_service(oldService);
@@ -207,7 +209,7 @@ void OBSBasicSettings::SaveStream1Settings()
 	OBSData settings = obs_data_create();
 	obs_data_release(settings);
 
-	if (!customServer) {
+	if (!customServer ^ xtServer) {
 		obs_data_set_string(settings, "service",
 				    QT_TO_UTF8(ui->service->currentText()));
 		obs_data_set_string(
@@ -216,7 +218,7 @@ void OBSBasicSettings::SaveStream1Settings()
 	} 
 	else if(xtServer){
 		obs_data_set_string(settings, "server",
-				    QT_TO_UTF8(ui->xtServer->text()));
+				    QT_TO_UTF8(ui->customServer->text()));
 		// obs_data_set_bool(settings, "use_auth",
 		// 		  ui->useAuth->isChecked());
 		// if (ui->useAuth->isChecked()) {
@@ -469,7 +471,7 @@ void OBSBasicSettings::on_service_currentIndexChanged(int)
 	ui->authPwLabel->setVisible(custom);
 	ui->authPwWidget->setVisible(custom);
 
-	if (custom) {
+	if (custom ^ xt) {
 		ui->streamkeyPageLayout->insertRow(1, ui->serverLabel,
 						   ui->serverStackedWidget);
 
@@ -477,18 +479,18 @@ void OBSBasicSettings::on_service_currentIndexChanged(int)
 		ui->serverStackedWidget->setVisible(true);
 		ui->serverLabel->setVisible(true);
 		on_useAuth_toggled();
-	}else if(xt){
-		ui->streamkeyPageLayout->insertRow(1, ui->serverLabel,
-						   ui->serverStackedWidget);
-
-		ui->serverStackedWidget->setCurrentIndex(1);
-		ui->serverStackedWidget->setVisible(true);
-		ui->serverLabel->setVisible(true);
-	} 
-	
+	}
 	else {
 		ui->serverStackedWidget->setCurrentIndex(0);
 	}
+
+
+	// if (peertube)
+ 	// 	ui->serverLabel->setText(
+ 	// 		QTStr("Basic.AutoConfig.StreamPage.Instance"));
+ 	// else
+ 	// 	ui->serverLabel->setText(
+ 	// 		QTStr("Basic.AutoConfig.StreamPage.Server"));
 
 #ifdef BROWSER_AVAILABLE
 	auth.reset();
@@ -569,7 +571,7 @@ const char *service_id = custom ? "rtmp_custom" : xt ? "xtstream_custom" : "rtmp
 	OBSData settings = obs_data_create();
 	obs_data_release(settings);
 
-	if (!custom) {
+	if (!custom ^ xt) {
 		obs_data_set_string(settings, "service",
 				    QT_TO_UTF8(ui->service->currentText()));
 		obs_data_set_string(
@@ -577,7 +579,7 @@ const char *service_id = custom ? "rtmp_custom" : xt ? "xtstream_custom" : "rtmp
 			QT_TO_UTF8(ui->server->currentData().toString()));
 	}else if (xt) {
 		obs_data_set_string(settings, "server",
-				    QT_TO_UTF8(ui->xtServer->text()));
+				    QT_TO_UTF8(ui->customServer->text()));
 	} 
 	
 	else {
