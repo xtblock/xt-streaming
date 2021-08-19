@@ -38,6 +38,7 @@ if (isMainThread) {
       });
     });
   });
+  console.log("Video Encoding has been Started")
 } else {
   var spawn = require('child_process').spawn;
   const inputData = workerData;
