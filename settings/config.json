@@ -1,0 +1,5 @@
+{
+    "tcp_address": "tcp://localhost:8000",
+    "output_path": "media",
+    "media_path": "http://localhost:4001/stream/media/master.m3u8"
+}

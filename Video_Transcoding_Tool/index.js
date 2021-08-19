@@ -5,7 +5,8 @@ const {
   workerData,
 } = require('worker_threads');
 const path = require('path');
-const savePath = path.join(__dirname, '../media');
+const config = require(path.join(__dirname,'../settings/config'));
+const savePath = path.join(__dirname, `../${config.output_path}`);
 if (isMainThread) {
   const videoData = {
     width: ['1920', '1280', '842', '640', '426'],
@@ -46,7 +47,7 @@ if (isMainThread) {
   var cmd = 'ffmpeg';
   var args = [
     '-hide_banner',
-    '-i', 'tcp://localhost:8000',
+    '-i', config.tcp_address,
     '-vf', `scale=w=${inputData.width}:h=${inputData.height}`,
     '-c:a', 'aac', '-ar', '48000', '-b:a', `${inputData.audioBitRate}`,
     '-profile:v', 'main',
