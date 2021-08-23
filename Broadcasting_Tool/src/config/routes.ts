@@ -8,9 +8,8 @@ class RouterConfig {
         router.get("/", MainController.index);
         router.get("/videos", MainController.videos);
         router.get("/stream/:key/:quality", MainController.stream);
+        router.get("/media/stream", MainController.media);
         router.get("/:resource", MainController.resource);
-        //router.get("/socket.io", MainController.stream);
-        router.get("/test", MainController.encode(io));
 
 
         router.use(`${this.API_PATH}/user`, userRouter); 

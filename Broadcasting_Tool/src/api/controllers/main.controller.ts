@@ -79,31 +79,33 @@ export class MainController {
   ) => {
     try {
       console.log(req.params.key, req.params.quality);
-     // await httpService.create();
-      /*  const encodePath = path.join(__dirname, 'encode.sh');
-      const videoPath = 'tcp://localhost:8000';
-      const mediaPath = path.join(__dirname, 'media');
-      const { execFile, exec } = require('child_process');
-      const child = exec(
-        `bash ${encodePath} ${videoPath} ${mediaPath}`,
-        (error, stdout, stderr) => {
-          if (error) {
-            console.log('error in encode!!', error);
-            throw error;
-          }
-          console.log('stdout-encode SUCCESS,');
-        }
-      ); */
-
-     
-
-
-  
-      console.log(__dirname);
+      // console.log(__dirname);
       res.sendFile(path.join(__dirname, `../../${req.params.key}/${req.params.quality}`));
-      //res.status(200).send("in prog");
+      // res.sendFile(path.join(__dirname, `../../settings/config.json`));
+
+    
+     
+      console.log(res.sendFile,"checkk")
     } catch (err) {
       next(err);
     }
   };
+  public static media = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      res.sendFile(path.join(__dirname, `../../settings/config.json`));
+
+    
+     
+      console.log(res.sendFile,"checkk")
+    } catch (err) {
+      next(err);
+    }
+  };
+  
+
+
 }

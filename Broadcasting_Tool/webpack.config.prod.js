@@ -29,7 +29,7 @@ module.exports = {
     /^[a-z\-0-9]+$/ // Ignore node_modules folder
   ],
   optimization: {
-    minimize: false //Update this to true or false
+    minimize: true //Update this to true or false
   },
   devtool: 'source-map',
   watch: false,

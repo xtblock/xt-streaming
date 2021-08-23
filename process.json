@@ -1,0 +1,21 @@
+{
+    "apps": [
+
+        {
+            "name":"tcp_server", 
+            "cwd": "./tcp_server",
+            "script": "node index.js"
+        },
+        {
+            "name":"Video_Transcoding_Tool", 
+            "cwd": "./Video_Transcoding_Tool",
+            "script": "node index.js"
+        },
+        {
+            "name":"Broadcasting_Tool", 
+            "cwd": "./Broadcasting_Tool",
+            "script": "node dist/server.js"
+            
+        }
+    ]
+}

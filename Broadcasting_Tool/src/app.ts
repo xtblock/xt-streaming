@@ -132,8 +132,8 @@ class App {
         fs.mkdirSync(dir, { recursive: true });
 
 
-// ReadFile method is used to read the content from file.txt
-fs.readFile('../master.m3u8','utf8',readingFile);
+// ReadFile method is used to read the content from master.m3u8
+fs.readFile('../settings/master.m3u8','utf8',readingFile);
 
 function readingFile(error,data)
 {

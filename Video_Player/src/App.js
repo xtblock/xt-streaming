@@ -1,9 +1,15 @@
 
 import './App.css';
 import VideoJS from './VideoJS'
-
+import axios from'axios'
+import React, { useState, useEffect } from 'react';
+import HttpService from './httpservice';
 function App() {
 
+const [source,setSource]=useState(null)
+  HttpService.instance.getVideoUrl().then(response=>{
+    setSource(response)
+  })
   const videoJsOptions = { // lookup the options in the docs for more options
     autoplay: true,
     controls: true,
@@ -15,7 +21,7 @@ function App() {
     },
     
     sources: [{
-      src: `http://localhost:4001/stream/media/master.m3u8`,
+      src: source,
       type: 'application/x-mpegURL'
     },
  
@@ -34,3 +40,4 @@ function App() {
 }
 
 export default App;
+
