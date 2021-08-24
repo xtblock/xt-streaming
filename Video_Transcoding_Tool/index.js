@@ -9,13 +9,13 @@ const config = require(path.join(__dirname,'../settings/config'));
 const savePath = path.join(__dirname, `../${config.output_path}`);
 if (isMainThread) {
   const videoData = {
-    width: ['1920', '1280', '842', '640', '426'],
-    height: ['1080', '720', '480', '360', '240'],
-    videoBitRate: ['5000k', '2800k', '1400k', '800k', '240k'],
-    maxRate: ['5350k', '2996k', '1498k', '856k', '240k'],
-    BufSize: ['7500k', '4200k', '2100k', '1200k', '480k'],
-    audioBitRate: ['192k', '128k', '128k', '96k', '64k'],
-    fileName: ['1080p', '720p', '480p', '360p', '240p']
+    width: ['1920',  '842', , '426'],
+    height: ['1080' , '480',  '240'],
+    videoBitRate: ['5000k', '1400k', '240k'],
+    maxRate: ['5350k',  '1498k',  '240k'],
+    BufSize: ['7500k',  '2100k',  '480k'],
+    audioBitRate: ['192k',  '128k',  '64k'],
+    fileName: ['1080p',  '480p',  '240p']
   };
 
   videoData.width.forEach(async function (data, index) {
