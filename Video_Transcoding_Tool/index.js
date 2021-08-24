@@ -9,7 +9,7 @@ const config = require(path.join(__dirname,'../settings/config'));
 const savePath = path.join(__dirname, `../${config.output_path}`);
 if (isMainThread) {
   const videoData = {
-    width: ['1920',  '842', , '426'],
+    width: ['1920',  '842', '426'],
     height: ['1080' , '480',  '240'],
     videoBitRate: ['5000k', '1400k', '240k'],
     maxRate: ['5350k',  '1498k',  '240k'],
