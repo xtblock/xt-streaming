@@ -47,6 +47,7 @@ if (isMainThread) {
   var cmd = 'ffmpeg';
   var args = [
     '-hide_banner',
+    '-threads','1',
     '-i', config.tcp_address,
     '-vf', `scale=w=${inputData.width}:h=${inputData.height}`,
     '-c:a', 'aac', '-ar', '48000', '-b:a', `${inputData.audioBitRate}`,
