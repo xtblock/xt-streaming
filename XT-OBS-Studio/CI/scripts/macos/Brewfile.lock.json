@@ -158,6 +158,14 @@
         "CLT": "12.5.0.0.1.1617976050",
         "Xcode": "12.5",
         "macOS": "11.5"
+      },
+      "catalina": {
+        "HOMEBREW_VERSION": "3.2.9",
+        "HOMEBREW_PREFIX": "/usr/local",
+        "Homebrew/homebrew-core": "7625912716982e65d4302e6d6dc31443be631c1f",
+        "CLT": "11.0.0.33.17",
+        "Xcode": "12.4",
+        "macOS": "10.15.7"
       }
     }
   }
