@@ -9,6 +9,7 @@ function App() {
 const [source,setSource]=useState(null)
   HttpService.instance.getVideoUrl().then(response=>{
     setSource(response)
+    console.log('source', source);
   })
   const videoJsOptions = { // lookup the options in the docs for more options
     autoplay: true,

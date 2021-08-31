@@ -1,0 +1,19 @@
+{
+  "name": "XT Streaming",
+  "version": "1.0",
+  "description": "Welcome To Xt Streaming",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup":"./popup.html"
+  },
+  "permissions":[
+    "scripting"
+  ],
+  "options_page":"./index.html",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
