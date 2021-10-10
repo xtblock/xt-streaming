@@ -43,12 +43,11 @@ if (isMainThread) {
 } else {
   var spawn = require('child_process').spawn;
   const inputData = workerData;
-
   var cmd = 'ffmpeg';
   var args = [
     '-hide_banner',
     '-threads','1',
-    '-i', config.tcp_address,
+    '-i', 'tcp://192.168.196.86:8000',// config.tcp_address,
     '-vf', `scale=w=${inputData.width}:h=${inputData.height}`,
     '-c:a', 'aac', '-ar', '48000', '-b:a', `${inputData.audioBitRate}`,
     '-profile:v', 'main',

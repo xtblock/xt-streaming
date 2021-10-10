@@ -8,13 +8,6 @@ services:
     ports:
       - 8000:8000
     networks: 
-      - node_net  tcp_server:
-    build:
-      context: ./tcp_server
-    ports:
-      - 8000:8000
-
-    networks: 
       - node_net
   transcode:
     build:

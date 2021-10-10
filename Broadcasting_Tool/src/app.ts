@@ -18,7 +18,7 @@ class App {
   protected port;
   constructor() {
     this.app = express(); //run the express instance and store in app
-    this.port = process.env.PORT || 4002;
+    this.port = process.env.PORT || 4001;
     this.config(this.app);
     this.listen();
   }
