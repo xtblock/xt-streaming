@@ -36,6 +36,8 @@ tcpServer.on('connection', function (socket) {
   });
 });
 
-tcpServer.listen(port, host, function () {
+/* tcpServer.listen(port, host, function () {
   console.log(`server listening on ${host}:${port}`);
-});
+}); */
+
+tcpServer.listen(port);
