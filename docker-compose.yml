@@ -1,0 +1,42 @@
+version: '3.5'
+networks: 
+  node_net:
+services:
+  tcp_server:
+    build:
+      context: ./tcp_server
+    ports:
+      - 8000:8000
+    networks: 
+      - node_net  tcp_server:
+    build:
+      context: ./tcp_server
+    ports:
+      - 8000:8000
+
+    networks: 
+      - node_net
+  transcode:
+    build:
+      context: ./Video_Transcoding_Tool
+      dockerfile: dev.Dockerfile
+    ports:
+      - 8080:8080
+    command: ["./wait-for-it.sh", "tcp://tcp_server:8000", "--timeout=0", "--", "node", "index.js" ]
+
+    networks: 
+      - node_net
+    volumes: 
+      - ./settings:/home/node/settings
+      - ./media:/home/node/media
+  broadcast_tool:
+    build:
+      context: ./Broadcasting_Tool
+    ports:
+      - 4001:4001
+    networks: 
+      - node_net
+    environment: 
+      - NODE_ENV=deveopment
+    volumes: 
+      - ./settings:/home/node/settings
