@@ -47,7 +47,7 @@ if (isMainThread) {
   var args = [
     '-hide_banner',
     '-threads','1',
-    '-i', 'tcp://192.168.196.86:8000',// config.tcp_address,
+    '-i', 'tcp://localhost:8000',// config.tcp_address,
     '-vf', `scale=w=${inputData.width}:h=${inputData.height}`,
     '-c:a', 'aac', '-ar', '48000', '-b:a', `${inputData.audioBitRate}`,
     '-profile:v', 'main',
