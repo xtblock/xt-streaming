@@ -15,7 +15,6 @@ services:
       dockerfile: dev.Dockerfile
     ports:
       - 8080:8080
-    command: ["./wait-for-it.sh", "tcp://tcp_server:8000", "--timeout=0", "--", "node", "index.js" ]
 
     networks: 
       - node_net
