@@ -22,7 +22,7 @@ const [source,setSource]=useState(null)
     },
     
     sources: [{
-      src: source,
+      src: 'http://localhost:8080/media/master.m3u8',
       type: 'application/x-mpegURL'
     },
  
