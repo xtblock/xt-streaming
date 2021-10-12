@@ -129,18 +129,18 @@ class App {
       console.log(`App listening on the http://localhost:${this.port}`);
       const dir='../media'
       if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true });
+        // fs.mkdirSync(dir, { recursive: true });
 
 
 // ReadFile method is used to read the content from master.m3u8
-fs.readFile('../settings/master.m3u8','utf8',readingFile);
+// fs.readFile('../settings/master.m3u8','utf8',readingFile);
 
 function readingFile(error,data)
 {
 	if(error){
 		console.log(error);
 	} 
-		fs.writeFile('../media/master.m3u8',data,'utf8',writeFile);
+	//	fs.writeFile('../media/master.m3u8',data,'utf8',writeFile);
 	}
 }
 

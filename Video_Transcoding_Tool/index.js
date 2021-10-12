@@ -14,35 +14,30 @@ const {
 } = require('worker_threads');
 const path = require('path');
 const  fs  = require('fs');
- const config = require(path.join(__dirname,'../settings/config'));
+ const config = require(path.join(__dirname,'./settings/config'));
 const savePath =`/home/node/media`;
 if (isMainThread) {
 
 
 
   app.get('/media/:quality', (req, res) => {
+
     res.sendFile(`/home/node/media/${req.params.quality}`); //('/home/node/media/master.m3u8')
     // res.json("im here")
+    
   })
 
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
     const dir='../media'
-    if (!fs.existsSync(dir)){
-      fs.mkdirSync(dir, { recursive: true });
-      const master=fs.readFile('/home/node/settings/master.m3u8','utf8',()=>{});
-      fs.writeFile('/home/node/media/master.m3u8',master,'utf8',writeFile(error));
-      
-      
-
-          function writeFile(error){
-            if(error){
-              console.log(error)
-            }
-          }
-        
-  
-  }
+    
+      fs.copyFile('./settings/master.m3u8', '/home/node/media/master.m3u8', (err) => {
+        if (err) throw err;
+        console.log('source.txt was copied to destination.txt');
+      });
+      // fs.mkdirSync(dir, { recursive: true });
+      // const master=fs.readFile('/home/node/settings/master.m3u8','utf8',()=>{});
+      ///fs.writeFile('/home/node/media/master.m3u8',master,'utf8',writeFile(error));
   })
 
     const videoData = {
@@ -83,7 +78,7 @@ if (isMainThread) {
   var args = [
     '-hide_banner',
     '-threads','1',
-    '-i','tcp://172.18.0.1:8000',// config.tcp_address,
+    '-i', config.tcp_address,
     '-vf', `scale=w=${inputData.width}:h=${inputData.height}`,
     '-c:a', 'aac', '-ar', '48000', '-b:a', `${inputData.audioBitRate}`,
     '-profile:v', 'main',
