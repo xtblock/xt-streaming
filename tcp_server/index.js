@@ -24,10 +24,13 @@ tcpServer.on('connection', function (socket) {
   //when  streaming is stopped
   socket.once('close', function () {
     console.log(`streaming has been stopped`);
-    
+    console.log(`sockets removal`);
+    console.log('sockets', sockets);
+    sockets=[];
   });
   //to remove the  client from socket when straming is stopped
   socket.on('end', function () {
+    console.log(`ending`);
     sockets=[];
   });
   // when any error occurs in connection

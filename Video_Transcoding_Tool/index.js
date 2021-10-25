@@ -1,153 +1,157 @@
-
-const express = require('express')
-const  cors = require ('cors');
-const app = express()
-
-const port = 8080
+const express = require("express");
+const cors = require("cors");
+const app = express();
+const port = 8085;
 app.use(cors());
 
-const {
-  Worker,
-  isMainThread,
-  parentPort,
-  workerData,
-} = require('worker_threads');
-const path = require('path');
-const  fs  = require('fs');
- const config = require(path.join(__dirname,'./settings/config'));
-const savePath =`/home/node/media`;
-if (isMainThread) {
+const path = require("path");
+const fs = require("fs");
+const config = require(path.join(__dirname, "./settings/config"));
+const savePath = `/home/node/media`;
+app.get("/media/:quality", (req, res) => {
+  res.sendFile(`/home/node/media/${req.params.quality}`); //('/home/node/media/master.m3u8')
+  // res.json("im here")
+});
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
+  const dir = "./media";
+});
+console.log("Video Encoding has been Started");
 
-
-
-  app.get('/media/:quality', (req, res) => {
-
-    res.sendFile(`/home/node/media/${req.params.quality}`); //('/home/node/media/master.m3u8')
-    // res.json("im here")
-    
-  })
-
-  app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-    const dir='../media'
-    
-      fs.copyFile('./settings/master.m3u8', '/home/node/media/master.m3u8', (err) => {
-        if (err) throw err;
-        console.log('source.txt was copied to destination.txt');
-      });
-      // fs.mkdirSync(dir, { recursive: true });
-      // const master=fs.readFile('/home/node/settings/master.m3u8','utf8',()=>{});
-      ///fs.writeFile('/home/node/media/master.m3u8',master,'utf8',writeFile(error));
-  })
-
-    const videoData = {
-    width: ['1920',  '842', '426'],
-    height: ['1080' , '480',  '240'],
-    videoBitRate: ['5000k', '1400k', '240k'],
-    maxRate: ['5350k',  '1498k',  '240k'],
-    BufSize: ['7500k',  '2100k',  '480k'],
-    audioBitRate: ['192k',  '128k',  '64k'],
-    fileName: ['1080p',  '480p',  '240p']
-  };
-  videoData.width.forEach(async function (data, index) {
-    return new Promise((resolve, reject) => {
-      const worker = new Worker(__filename, {
-        workerData: {
-          width: data,
-          height: videoData.height[index],
-          videoBitRate: videoData.videoBitRate[index],
-          maxRate: videoData.maxRate[index],
-          BufSize: videoData.BufSize[index],
-          audioBitRate: videoData.audioBitRate[index],
-          fileName: videoData.fileName[index]
-        },
-      });
-      worker.on('message', resolve);
-      worker.on('error', reject);
-      worker.on('exit', (code) => {
-        if (code !== 0)
-          reject(new Error(`Worker stopped with exit code ${code}`));
-      });
-    });
-  });
-  console.log("Video Encoding has been Started")
-  } else {
-  var spawn = require('child_process').spawn;
-  const inputData = workerData;
-  var cmd = 'ffmpeg';
-  var args = [
-    '-hide_banner',
-    '-threads','1',
-    '-i', config.tcp_address,
-    '-vf', `scale=w=${inputData.width}:h=${inputData.height}`,
-    '-c:a', 'aac', '-ar', '48000', '-b:a', `${inputData.audioBitRate}`,
-    '-profile:v', 'main',
-    '-hls_time', '10',
-    '-crf', '20',
-    '-g', '48', '-keyint_min', '48',
-    '-sc_threshold', '0',
-    '-b:v', `${inputData.videoBitRate}`, '-maxrate', `${inputData.maxRate}`, '-bufsize', `${inputData.BufSize}`,
-    '-hls_segment_filename', `${savePath}/${inputData.fileName}%03d.ts`,
-    `${savePath}/${inputData.fileName}.m3u8`,
+start();
+function start() {
+  console.log('started');
+  var spawn = require("child_process").spawn;
+  args = [
+    "-timeout","1000000",
+    "-re",
+    "-i",
+    config.tcp_address,
+    "-y",
+    "-filter_complex",
+    "[0:v]split=3[v1][v2][v3];[v1]copy[v1out];[v2]scale=w=852:h=480[v2out];[v3]scale=w=640:h=360[v3out]",
+    "-map",
+    "[v1out]",
+    "-c:v:0",
+    "libx264",
+    "-x264-params",
+    "nal-hrd=cbr:force-cfr=1",
+    "-b:v:0",
+    "5M",
+    "-maxrate:v:0",
+    "5M",
+    "-minrate:v:0",
+    "5M",
+    "-bufsize:v:0",
+    "10M",
+    "-preset",
+    "veryfast",
+    "-g",
+    "48",
+    "-sc_threshold",
+    "0",
+    "-keyint_min",
+    "48",
+    "-map",
+    "[v2out]",
+    "-c:v:1",
+    "libx264",
+    "-x264-params",
+    "nal-hrd=cbr:force-cfr=1",
+    "-b:v:0",
+    "3M",
+    "-maxrate:v:0",
+    "3M",
+    "-minrate:v:0",
+    "3M",
+    "-bufsize:v:0",
+    "3M",
+    "-preset",
+    "veryfast",
+    "-g",
+    "48",
+    "-sc_threshold",
+    "0",
+    "-keyint_min",
+    "48",
+    "-map",
+    "[v3out]",
+    "-c:v:2",
+    "libx264",
+    "-x264-params",
+    "nal-hrd=cbr:force-cfr=1",
+    "-b:v:0",
+    "1M",
+    "-maxrate:v:0",
+    "1M",
+    "-minrate:v:0",
+    "1M",
+    "-bufsize:v:0",
+    "1M",
+    "-preset",
+    "veryfast",
+    "-g",
+    "48",
+    "-sc_threshold",
+    "0",
+    "-keyint_min",
+    "48",
+    "-map",
+    "a:0",
+    "-c:a:0",
+    "aac",
+    "-b:a:0",
+    "96k",
+    "-ac",
+    "2",
+    "-map",
+    "a:0",
+    "-c:a:1",
+    "aac",
+    "-b:a:1",
+    "96k",
+    "-ac",
+    "2",
+    "-map",
+    "a:0",
+    "-c:a:2",
+    "aac",
+    "-b:a:2",
+    "48k",
+    "-ac",
+    "2",
+    "-f",
+    "hls",
+    "-hls_time",
+    "4",
+    "-hls_playlist_type",
+    "event",
+    "-hls_flags",
+    "delete_segments",
+    "-hls_segment_type",
+    "mpegts",
+    "-master_pl_name",
+    "master.m3u8",
+    "-var_stream_map",
+    "v:0,a:0,name:720p v:1,a:1,name:480p v:2,a:2,name:360p",
+    "/home/node/media/%v.m3u8",
   ];
-  var proc = spawn(cmd, args);
-  proc.stdout.on('data', function (data) {
-    console.log(data);
-  });
-  proc.stderr.setEncoding('utf8');
-  proc.stderr.on('data', function (data) {
-    console.log(data);
-  });
-  proc.on('close', function () {
-    console.log('finished');
-  });
-
+  try {
+    var proc = spawn(`ffmpeg`, args);
+    proc.stdout.on("data", function (data) {
+      console.log(data);
+    });
+    proc.stderr.setEncoding("utf8");
+    proc.stderr.on("data", function (data) {
+      console.log(data);
+    });
+    proc.on("close", function () {
+      console.log("finished");
+      start();
+    });
+  } catch (e) {
+    console.log('node error', e);
+    start();
+  }
+  
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-
-//     
-//     
-//       
-
-
-// // ReadFile method is used to read the content from master.m3u8
-// 
-
-// 
-// 
-
-
-
-
-// }
-//   });
-
-
-
-
-
-
-
-
-
-
-
-
-

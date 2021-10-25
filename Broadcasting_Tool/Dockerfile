@@ -1,11 +1,11 @@
-FROM --platform=linux/amd64 node:lts-alpine
+FROM  node:lts-alpine
 
 # set node user to un the application
 RUN mkdir -p /home/node/app/node_modules \
     && mkdir -p /home/node/app/dist \
     && chown -R node:node /home/node/app 
 
-RUN npm install pm2 -g
+
 
 
 # Create app directory
@@ -35,5 +35,5 @@ RUN npm run build:prod
 
 
 EXPOSE 4001
-# CMD [ "node", "dist/server.js" ]
-CMD ["pm2-runtime", "dist/server.js"]
+ CMD [ "node", "dist/server.js" ]
+# CMD ["pm2-runtime", "dist/server.js"]
