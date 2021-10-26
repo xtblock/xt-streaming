@@ -2,6 +2,7 @@ FROM  node:lts-alpine
 
 # Install ffmpeg
 RUN apk add  --no-cache ffmpeg
+RUN apk update && apk add bash
 
 # set node user to un the application
 RUN mkdir -p /home/node/app/node_modules \
