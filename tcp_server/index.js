@@ -1,46 +1,63 @@
-var net = require('net');
-var tcpServer = net.createServer();
+//modules Import
+const net = require("net");
+const tcpServer = net.createServer();
 const port = 8000;
-const host = 'localhost';
+const setting = require("./setting.json");
+const transcodingToolUrl = setting.transcodingAddress;
 
-var sockets = [];
+// connections
 
-//when connection is established
-tcpServer.on('connection', function (socket) {
-  console.log('connection established');
-  sockets.push(socket);
+let obsSockets = [];
+let ffmpegSockets = [];
 
-  // send incoming stream to ffmpeg
-  socket.on('data', function (data) {
-    var clients = sockets.length;
+// connection emit when client is connected
 
-    //to prevent data sending back to obs socket
-    for (var i = 0; i < clients; i++) {
-      if (sockets[i] === socket) continue;
-      sockets[i].write(data);
+tcpServer.on("connection", (socket) => {
+console.log(socket.remoteAddress,'connection') 
+ if (transcodingToolUrl === `${socket.remoteAddress}`) {
+    ffmpegSockets.push(socket);
+  } else {
+    obsSockets.push(socket);
+      ffmpegSockets[0].write(socket.remoteAddress);
+  }
+
+  // data writing from obs-studio to transcoding
+
+  socket.on("data", (data) => {
+    if (obsSockets.includes(socket)) {
+      let i = obsSockets.indexOf(socket)+1;
+      console.log(`${socket.remoteAddress} writing stream to ${ ffmpegSockets[i].remoteAddress}` )
+ 	
+ffmpegSockets[i].write(data);
     }
   });
 
-  //when  streaming is stopped
-  socket.once('close', function () {
-    console.log(`streaming has been stopped`);
-    console.log(`sockets removal`);
-    console.log('sockets', sockets);
-    sockets=[];
-  });
-  //to remove the  client from socket when straming is stopped
-  socket.on('end', function () {
-    console.log(`ending`);
-    sockets=[];
-  });
-  // when any error occurs in connection
-  socket.on('error', function () {
-    console.log(`connection error`);
+    // emited when obs connection is closed
+
+  socket.once("close", () => {
+    if (obsSockets.includes(socket)) {
+      socketIndex = obsSockets.indexOf(socket);
+      obsSocketRemove(socketIndex);
+      ffmpegSocketRemove(socketIndex + 1);
+    }
   });
 });
 
-/* tcpServer.listen(port, host, function () {
-  console.log(`server listening on ${host}:${port}`);
-}); */
+// removing obs socket from server
+const obsSocketRemove = (socketIndex) => {
+  obsSockets[socketIndex].destroy();
+  obsSockets.splice(socketIndex, 1);
+ // console.log(obsSockets[socketIndex].remoteAddress, "connection has been closed");
+};
 
-tcpServer.listen(port);
+// removing FFMPEG socket from server
+
+const ffmpegSocketRemove = (socketIndex) => {
+  ffmpegSockets[socketIndex].destroy();
+  ffmpegSockets.splice(socketIndex, 1);
+  //console.log(ffmpegSockets[socketIndex].remoteAddress,"connection has been closed");
+};
+
+tcpServer.listen(port,'0.0.0.0',() => {
+  console.log(`TCP Server listening on port ${port}`);
+});

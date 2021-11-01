@@ -1,10 +1,8 @@
-FROM --platform=linux/amd64 node:lts-alpine
+FROM  node:lts-alpine
 
 # set node user to un the application
 RUN mkdir -p /home/node/app/node_modules \
     && chown -R node:node /home/node/app 
-
-
 
 
 # Create app directory
@@ -29,5 +27,5 @@ RUN npm install
 COPY --chown=node:node . .
 
 EXPOSE 8000
- CMD [ "node", "index.js" ]
+CMD [ "node", "index.js" ]
 # CMD ["pm2-runtime", "index.js"]

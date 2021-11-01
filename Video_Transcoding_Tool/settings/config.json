@@ -1,25 +1,30 @@
 {
-  "tcp_address": "tcp://13.232.124.131:8000",
+  "tcp_address": "tcp://15.206.100.115:8000",
   "quality": [
+     {
+      "res":"1920x1080",
+      "bit_rate":"3000k",
+      "buff_size":"3000k",
+      "audio_rate":"96k"
+      },
     {
-      "res": "640x360",
-      "bitrate": "800k",
+      "res":"1280x720",
+        "bit_rate":"1500k",
+        "buff_size":"1500k",
+        "audio_rate":"96k"
+    },
+    {
+      "res": "852x480",
+      "bit_rate": "500k",
+      "buff_size": "500k",
       "audio_rate": "96k"
     },
     {
-      "res": "842x480",
-      "bitrate": "1400k",
-      "audio_rate": "128k"
-    },
-    {
-      "res": "1280x720",
-      "bitrate": "2800k",
-      "audio_rate": "128k"
-    },
-    {
-      "res": "1920x1080",
-      "bitrate": "5000k",
-      "audio_rate": "192k"
+      "res": "640x360",
+      "bit_rate": "400k",
+      "buff_size": "400k",
+      "audio_rate": "48k"
     }
   ]
 }
+
