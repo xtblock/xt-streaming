@@ -1,61 +1,66 @@
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
 const app = express();
+const server = require('http').createServer(app);
 const port = 8085;
-const net = require("net");
+const cors = require('cors');
 app.use(cors());
-const path = require("path");
-const config = require(path.join(__dirname, "./settings/config"));
-const ffmpeg = require("./ffmpeg");
-
-const {
-Worker,
- isMainThread,
-parentPort,
-workerData,
-} = require("worker_threads");
-
-let i = 1;
-const workerThread = (i) => {
-return new Promise((resolve, reject) => {
- const worker = new Worker(__filename, {
-  workerData: i,
-});
-worker.on("message", resolve);
- worker.on("error", reject);
- worker.on("exit", (code) => {
- if (code !== 0)
-   reject(new Error(`worker stopped with exit code ${code}`));
-});
-});
-};
-
-if (isMainThread) {
-app.get("/media/stream1/:quality", (req, res) => {
-  res.sendFile(`/home/node/media/stream1/${req.params.quality}`); //('/home/node/media/master>
+const net = require('net');
+const fs = require('fs');
+const path = require('path');
+const config = require(path.join(__dirname, './settings/config'));
+const ffmpeg = require('./ffmpeg');
+const io = require('socket.io')(server, {
+  cors: {
+    orgin: '*',
+  },
 });
 
-app.get("/media/stream2/:quality", (req, res) => {
-  res.sendFile(`/home/node/media/stream2/${req.params.quality}`); //('/home/node/media/master>
+let numbersOfClients = [];
+
+app.get('/', (req, res) => {
+  res.json(`Hello World`);
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.get('/media/:stream/:quality', (req, res) => {
+  res.sendFile(`/home/node/media/${req.params.stream}/${req.params.quality}`);
 });
 
-var ffmpegClient = net.connect({ port: 8000, host: "15.206.100.115" }, () => {
-  console.log(config.tcp_address);
-  console.log("connected to TCP Server");
-   workerThread(i);
- // ffmpeg(`stream${i}`);
+server.listen(port, () => {
+  console.log('server running on ', port);
 });
-ffmpegClient.on("data", (data) => {
-  connectedClient = parseInt(data.toString());
-  i++;
-   //ffmpeg(`stream${workerData}`);
-  //ffmpeg(`stream${i}`);
-	workerThread(i);
+
+io.on('connection', (socket) => {
+  // console.log("connected", socket.id);
+  socket.emit('stream', numbersOfClients);
 });
- } else {
-ffmpeg(`stream${workerData}`);
-}
+
+io.sockets.emit('stream', numbersOfClients);
+
+const tcpServerUrl = new URL(config.tcp_address);
+
+var ffmpegConnection = net.connect(
+  {
+    port: tcpServerUrl.port,
+    host: tcpServerUrl.hostname,
+  },
+  () => {
+    console.log('connected to TCP Server');
+  },
+);
+
+ffmpegConnection.on('data', (data) => {
+  numbersOfClients.push(data.toString());
+  streamId = data.toString();
+  const streamName = streamId;
+  ffmpeg(streamName);
+
+  const intervalObj = setInterval(function () {
+    const file = `/home/node/media/${streamName}/master.m3u8`;
+    const fileExists = fs.existsSync(file);
+
+    if (fileExists) {
+      io.sockets.emit('stream', numbersOfClients);
+      clearInterval(intervalObj);
+    }
+  }, 2000);
+});

@@ -1,17 +1,17 @@
 {
   "tcp_address": "tcp://15.206.100.115:8000",
   "quality": [
-     {
-      "res":"1920x1080",
-      "bit_rate":"3000k",
-      "buff_size":"3000k",
-      "audio_rate":"96k"
-      },
     {
-      "res":"1280x720",
-        "bit_rate":"1500k",
-        "buff_size":"1500k",
-        "audio_rate":"96k"
+      "res": "1920x1080",
+      "bit_rate": "3000k",
+      "buff_size": "3000k",
+      "audio_rate": "96k"
+    },
+    {
+      "res": "1280x720",
+      "bit_rate": "1500k",
+      "buff_size": "1500k",
+      "audio_rate": "96k"
     },
     {
       "res": "852x480",
@@ -27,4 +27,3 @@
     }
   ]
 }
-
