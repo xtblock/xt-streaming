@@ -1,4 +1,4 @@
-FROM  node:lts-alpine
+FROM  node:14.15.1-alpine
 
 # Install ffmpeg
 RUN apk add  --no-cache ffmpeg

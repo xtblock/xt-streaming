@@ -1,4 +1,4 @@
-FROM  node:lts-alpine
+FROM  node:14.15.1-alpine
 
 # set node user to un the application
 RUN mkdir -p /home/node/app/node_modules \
@@ -14,7 +14,7 @@ WORKDIR /home/node/app
 COPY package*.json ./
 
 # Set user
-USER node
+USER root
 
 # To install other dependencies
 RUN npm install
