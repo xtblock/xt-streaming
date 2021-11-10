@@ -28,7 +28,9 @@ tcpServer.on('connection', (socket) => {
   socket.on('data', (data) => {
     if (obsSockets.includes(socket)) {
       let i = obsSockets.indexOf(socket) + 1;
-      ffmpegSockets[i].write(data);
+      if (ffmpegSockets[i] !== undefined) {
+        ffmpegSockets[i].write(data);
+      }
     }
   });
 
