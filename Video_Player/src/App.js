@@ -14,6 +14,11 @@ function App() {
     },
   });
   const streamSelection = (stream) => {
+    if (source == stream) {
+      setUrl(``);
+      setSource('');
+      return;
+    }
     setUrl(`${config.Transcoding_Tool}/media/${stream}/master.m3u8`);
     setSource(stream);
   };
@@ -143,6 +148,7 @@ function App() {
                           className='align-self-center'
                           src={require('./assets/pause-circle.svg').default}
                           alt=''
+
                         />
                       </span>
                     ) : (
