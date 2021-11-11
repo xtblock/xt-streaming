@@ -3,35 +3,27 @@ import config from './config.json';
 import React, { useState, useEffect } from 'react';
 import VideoJS from './videoPlayer/VideoJS';
 import io from 'socket.io-client';
+import Thumbnail from './videoThumbnail/thumbnail';
 function App() {
   const [streams, setStreams] = useState([]);
-  const [source, setSource] = useState('');
+  const thumbRef = React.useRef(null);
   const [url, setUrl] = useState('');
-
+  
   const socket = io(config.Transcoding_Tool, {
     cors: {
       origin: '*',
     },
   });
   const streamSelection = (stream) => {
-    if (source == stream) {
-      setUrl(``);
+ /*    if (source == stream) {
+      // setUrl(``);
       setSource('');
       return;
-    }
+    } */
     setUrl(`${config.Transcoding_Tool}/media/${stream}/master.m3u8`);
-    setSource(stream);
+    // setSource(stream);
   };
-  let counter = 1;
-  const getNumbers = () => {
-    // return Math.floor(Math.random() * (3 - 1 + 1) + 1);
-    
-    if (counter > 3) {
-      return 1;
-    } else {
-      return counter++;
-    }
-  };
+  
   const gridAlign = (index) => {
     if (index <= 4) {
       return 'mt-4';
@@ -62,6 +54,13 @@ function App() {
       },
     ],
   };
+
+  const togglePlayback = (isPlaying) => {
+    console.log('thumbRef', thumbRef.current);
+    // const ref = thumbRef.current && thumbRef.current.children[0];
+    // console.log('ref', ref);
+    thumbRef.current.togglePlayback(isPlaying);
+  }
 
   return (
     <div>
@@ -115,7 +114,7 @@ function App() {
         </div>
         <div className='row' style={{ height: '645px' }}>
           <div id='video_container'>
-            <VideoJS options={videoJsOptions} />
+            <VideoJS options={videoJsOptions} toggle = {(bool) => togglePlayback(bool)} />
           </div>
         </div>
         <div className='row my-5 Sub-tittle_default'>
@@ -130,72 +129,8 @@ function App() {
             <div className='rect_4' />
           </div>
         </div>
-        <div className='row '>
-          {streams.map((item) => {
-            return (
-              <div className='col-md-3 mb-4'>
-                <div className='stream'>
-                  <div
-                    className='thumb'
-                    onClick={(e) => {
-                      streamSelection(`${item}`);
-                      // setPlay(true);
-                    }}
-                  >
-                    {item === source ? (
-                      <span className='thumb_button_pause'>
-                        <img
-                          className='align-self-center'
-                          src={require('./assets/pause-circle.svg').default}
-                          alt=''
-
-                        />
-                      </span>
-                    ) : (
-                      <span className='thumb_button_play'>
-                        <img
-                          className='align-self-center'
-                          src={
-                            require('./assets/Mediamodifier-Design-2.svg')
-                              .default
-                          }
-                          alt=''
-                        />
-                      </span>
-                    )}
-
-                    <img
-                      className='thumbnail '
-                      src={
-                        require(`./assets/thumbnail-${getNumbers()}.jpeg`)
-                          .default
-                      }
-                      alt=''
-                    />
-                  </div>
-                  <div className='text'>
-                    <h4 className='thumb_heading mt-3'>LIVE: {item}</h4>
-                    <div className='legend'>
-                      <span className='time'>
-                        <span>
-                          <img
-                            height='12px'
-                            width='12px'
-                            style={{ fill: 'grey' }}
-                            src={
-                              require('./assets/history_black_24dp.svg').default
-                            }
-                            alt=''
-                          />
-                          8 min ago
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div className='row ' >
+       <Thumbnail ref={thumbRef}   images ={streams} changeSource={item => streamSelection(item)}/>
         </div>
       </div>
       <div className='margin100' />
