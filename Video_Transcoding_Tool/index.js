@@ -18,7 +18,7 @@ const io = require('socket.io')(server, {
 let numbersOfClients = [];
 
 app.get('/', (req, res) => {
-  res.json(`Hello World`);
+  res.json(`Transcoding Tool`);
 });
 
 app.get('/media/:stream/:quality', (req, res) => {
@@ -45,11 +45,16 @@ var ffmpegConnection = net.connect(
   },
   () => {
     console.log('connected to TCP Server');
+    ffmpegConnection.once('end', function () {
+      console.log('disconnected from TCP Server');
+      process.exit(0);
+    });
   },
 );
 
 ffmpegConnection.on('data', (data) => {
   numbersOfClients.push(data.toString());
+  console.log(data.toString());
   streamId = data.toString();
   const streamName = streamId;
   ffmpeg(streamName);
