@@ -1,8 +1,8 @@
 //modules Import
 const net = require('net');
 const tcpServer = net.createServer();
-const port = 8000;
-const setting = require('./setting.json');
+const setting = require('./settings/config.json');
+const port = setting.tcpPort;
 const transcodingToolUrl = setting.transcodingAddress;
 
 // connections

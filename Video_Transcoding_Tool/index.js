@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
-const port = 8085;
 const cors = require('cors');
 app.use(cors());
 const net = require('net');
 const fs = require('fs');
 const path = require('path');
 const config = require(path.join(__dirname, './settings/config'));
+const port = config.port;
 const ffmpeg = require('./ffmpeg');
 const io = require('socket.io')(server, {
   cors: {
