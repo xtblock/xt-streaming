@@ -15,7 +15,7 @@ object-assign
  * @license  MIT
  */
 
-/*! @name @videojs/http-streaming @version 2.9.2 @license Apache-2.0 */
+/*! @name @videojs/http-streaming @version 2.10.2 @license Apache-2.0 */
 
 /*! @name aes-decrypter @version 3.1.2 @license Apache-2.0 */
 

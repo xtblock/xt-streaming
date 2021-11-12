@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.ab532c6c.chunk.css",
-    "main.js": "/static/js/main.450a9ee2.chunk.js",
-    "main.js.map": "/static/js/main.450a9ee2.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.cab93954.js",
-    "runtime-main.js.map": "/static/js/runtime-main.cab93954.js.map",
-    "static/css/2.b2b2d8ea.chunk.css": "/static/css/2.b2b2d8ea.chunk.css",
-    "static/js/2.8b316660.chunk.js": "/static/js/2.8b316660.chunk.js",
-    "static/js/2.8b316660.chunk.js.map": "/static/js/2.8b316660.chunk.js.map",
-    "static/js/3.a769c9e9.chunk.js": "/static/js/3.a769c9e9.chunk.js",
-    "static/js/3.a769c9e9.chunk.js.map": "/static/js/3.a769c9e9.chunk.js.map",
+    "main.css": "/static/css/main.e6753486.chunk.css",
+    "main.js": "/static/js/main.e390c30a.chunk.js",
+    "main.js.map": "/static/js/main.e390c30a.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.6e89201a.js",
+    "runtime-main.js.map": "/static/js/runtime-main.6e89201a.js.map",
+    "static/css/2.820e6aaf.chunk.css": "/static/css/2.820e6aaf.chunk.css",
+    "static/js/2.8510faf3.chunk.js": "/static/js/2.8510faf3.chunk.js",
+    "static/js/2.8510faf3.chunk.js.map": "/static/js/2.8510faf3.chunk.js.map",
+    "static/js/3.878774c4.chunk.js": "/static/js/3.878774c4.chunk.js",
+    "static/js/3.878774c4.chunk.js.map": "/static/js/3.878774c4.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/2.b2b2d8ea.chunk.css.map": "/static/css/2.b2b2d8ea.chunk.css.map",
-    "static/css/main.ab532c6c.chunk.css.map": "/static/css/main.ab532c6c.chunk.css.map",
-    "static/js/2.8b316660.chunk.js.LICENSE.txt": "/static/js/2.8b316660.chunk.js.LICENSE.txt",
+    "static/css/2.820e6aaf.chunk.css.map": "/static/css/2.820e6aaf.chunk.css.map",
+    "static/css/main.e6753486.chunk.css.map": "/static/css/main.e6753486.chunk.css.map",
+    "static/js/2.8510faf3.chunk.js.LICENSE.txt": "/static/js/2.8510faf3.chunk.js.LICENSE.txt",
     "static/media/Mediamodifier-Design-2.svg": "/static/media/Mediamodifier-Design-2.ee8647a9.svg",
     "static/media/App.css": "/static/media/bg.67bdafe8.jpg",
     "static/media/history_black_24dp.svg": "/static/media/history_black_24dp.ea64c985.svg",
@@ -23,10 +23,10 @@
     "static/media/thumbnail-3.jpeg": "/static/media/thumbnail-3.9ffbee3b.jpeg"
   },
   "entrypoints": [
-    "static/js/runtime-main.cab93954.js",
-    "static/css/2.b2b2d8ea.chunk.css",
-    "static/js/2.8b316660.chunk.js",
-    "static/css/main.ab532c6c.chunk.css",
-    "static/js/main.450a9ee2.chunk.js"
+    "static/js/runtime-main.6e89201a.js",
+    "static/css/2.820e6aaf.chunk.css",
+    "static/js/2.8510faf3.chunk.js",
+    "static/css/main.e6753486.chunk.css",
+    "static/js/main.e390c30a.chunk.js"
   ]
 }
