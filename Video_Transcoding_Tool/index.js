@@ -7,7 +7,7 @@ const net = require('net');
 const fs = require('fs');
 const path = require('path');
 const config = require(path.join(__dirname, './settings/config'));
-const port = config.port;
+const port = config.transcodingPort;
 const ffmpeg = require('./ffmpeg');
 const io = require('socket.io')(server, {
   cors: {
