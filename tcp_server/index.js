@@ -48,15 +48,20 @@ tcpServer.on('connection', (socket) => {
 // removing obs socket from server
 const obsSocketRemove = (socketIndex) => {
   //  obsSockets[socketIndex].destroy();
-  obsSockets.splice(socketIndex, 1);
+  if(obsSockets[socketIndex] !== undefined){
+    obsSockets.splice(socketIndex, 1);  
+  }
   // console.log(obsSockets[socketIndex].remoteAddress, "connection has been closed");
 };
 
 // removing FFMPEG socket from server
 
 const ffmpegSocketRemove = (socketIndex) => {
-  ffmpegSockets[socketIndex].destroy();
-  ffmpegSockets.splice(socketIndex, 1);
+
+  if(ffmpegSockets[socketIndex]!== undefined){
+    ffmpegSockets[socketIndex].destroy();
+    ffmpegSockets.splice(socketIndex, 1);
+}
   //console.log(ffmpegSockets[socketIndex].remoteAddress,"connection has been closed");
 };
 
