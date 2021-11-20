@@ -339,8 +339,9 @@ footer .button.ico {
 }
 .social-media > li {
   display: inline;
-  float: left;
-  padding: 5px;
+  position: relative;
+  left: 20px;
+  
 }
 .copyright .social-media li a {
   color: #03eac2;

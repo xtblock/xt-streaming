@@ -8,6 +8,9 @@ function App() {
   const [streams, setStreams] = useState([]);
   const thumbRef = React.useRef(null);
   const [url, setUrl] = useState('');
+  useEffect(() => {
+    document.title = "XT-STREAMING V1"
+  }, [])
   
   const socket = io(config.Transcoding_Tool, {
     cors: {
@@ -78,9 +81,9 @@ function App() {
                 />
               </div>
               <div className='col-md-5 px-5 align-self-center text'>
-                <h3>XT Streaming</h3>
+                <h3>XT-STREAMING V1</h3>
                 <p>
-                  Streaming <span>Counter-Strike: Global Offensive</span>
+                XTblock's  <span>Decentralised Live Streaming Technology</span>
                 </p>
               </div>
               <div className='col-md-6 align-self-center  buttons'>
@@ -88,14 +91,14 @@ function App() {
                   <div className='col-md-10'>
                     <div className='banner_btn pl-5 '>
                       <button className='btn-left px-2'>
-                        VIDEOS <span>7,950</span>
+                        VIDEOS <span>{streams.length}</span>
                       </button>
-                      <button className='btn-center px-2'>
+                      {/* <button className='btn-center px-2'>
                         FOLLOWERS <span>4,889,255</span>
                       </button>
                       <button className='btn-right px-2'>
                         FOLLOWING <span>12</span>
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>
@@ -144,9 +147,9 @@ function App() {
                 target='_blank'
                 style={{ color: 'white' }}
               >
-                XTBlock.io
+                XTblock
               </a>{' '}
-              | All Rights Reserved
+              | All Rights Reserved.
             </p>
             <ul className='social-media'>
               <li>
