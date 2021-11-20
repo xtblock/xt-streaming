@@ -1,6 +1,6 @@
 {
   "transcodingPort":8085,
-  "tcp_address": "tcp://172.17.0.3:8000",
+  "tcp_address": "tcp://172.17.0.1:8000",
   "quality": [
     {
       "res": "1920x1080",
