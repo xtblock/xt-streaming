@@ -26,6 +26,8 @@ export const VideoJS = (props) => {
             player.hlsQualitySelector({
         displayCurrentQuality: true,
     });
+    player.liveTracker.options_.playerOptions.liveui=true;
+    console.log(player.liveTracker.options_.playerOptions.liveui)
       });
     }
     player.on('playing', () => {

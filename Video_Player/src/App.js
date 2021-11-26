@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import VideoJS from './videoPlayer/VideoJS';
 import io from 'socket.io-client';
 import Thumbnail from './videoThumbnail/thumbnail';
+import Axios from 'axios';
+import hls from 'parse-hls'
+
 function App() {
   const [streams, setStreams] = useState([]);
   const thumbRef = React.useRef(null);
@@ -27,25 +30,37 @@ function App() {
     // setSource(stream);
   };
   
-  const gridAlign = (index) => {
-    if (index <= 4) {
-      return 'mt-4';
-    }
-  };
-  useEffect(() => {
-    socket.on('stream', (data) => {
-      setStreams(data);
 
-      console.log(data);
+/* Axios.get(`${config.Transcoding_Tool}/media/stream2/master.m3u8`).then(res=>{
+    //console.log(res.data)
+let a= hls.parse(res.data)
+let newUrl=
+  `${config.Transcoding_Tool}/media/stream2/${a.streamRenditions[0].uri}`
+Axios.get(newUrl).then(res=>{
+let isLive= hls.parse(res.data).isLive
+console.log(isLive)
+})
+}) */
+
+  useEffect(() => {
+    socket.once('playerLoaded', (data) => {
+  if(Array.isArray(data)){
+    setStreams(data);
+  }
     });
   }, []);
+  socket.once('onStreamAdd',(data)=>{
+    setStreams([...streams,data]);
+  })
 
+  
   const videoJsOptions = {
     autoplay: true,
-    controls: true,
+    controls: false,
     fluid: true,
     responsive: true,
     height: '640',
+   
     // width: '900',
 
     plugins: {},
