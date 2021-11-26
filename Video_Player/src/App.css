@@ -1,7 +1,14 @@
 body {
   background-image: url('./assets/bg.jpg');
 }
-
+.pl-10{
+  padding-left: 130px;
+  padding-top: 30px;
+  font-size: medium;
+}
+.tuned{
+  font-size: large;
+}
 .container {
   height: 150;
   background-color: #060b1f;

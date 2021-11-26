@@ -106,6 +106,7 @@ function App() {
             </div>
           </div>
         </div>
+        <div className="pl-10" style={{color:'white'}}><strong className="tuned">Coming soon:</strong> Our decentralised live-streaming technology. Stay tuned for our announcement and be sure to visit this site soon!</div>
         <div className='row tittle_default my-5'>
           <div className='d-flex'>
             <div className=' rect_1' />
