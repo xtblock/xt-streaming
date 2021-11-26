@@ -1,13 +1,14 @@
 const config = require('./settings/config.json');
 const spawn = require('child_process').spawn;
 const fs = require('fs');
-const ffmpeg = (id) => {
+
+const ffmpeg = async(id) => {
   const input = config.tcp_address;
   const output = `/home/node/media/${id}`;
-  if (!fs.existsSync(output)) {
-    fs.mkdirSync(output, {
+  if (!fs.exists(output,()=>{})) {
+    fs.mkdir(output, {
       recursive: true,
-    });
+    },()=>{});
   }
   const no_stream = config.quality.length;
   const source = [
@@ -108,19 +109,18 @@ const ffmpeg = (id) => {
   ];
 
   var proc = spawn(`ffmpeg`, args);
-  proc.stdout.on('data', function (data) {
-    console.log(data);
+  proc.stdout.on('data', function (data,err) {
+  console.log(err)
   });
 
-  proc.stderr.setEncoding('utf8');
 
   proc.stderr.on('data', function (data) {
-    console.log(data);
+    console.log(data.toString());
   });
 
   proc.on('close', function () {
-    console.log('finished');
-  });
+    console.log('finished')
+});
 };
 
 module.exports = ffmpeg;
