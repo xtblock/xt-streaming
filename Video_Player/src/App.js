@@ -27,18 +27,17 @@ function App() {
     // setSource(stream);
   };
   
-  const gridAlign = (index) => {
-    if (index <= 4) {
-      return 'mt-4';
-    }
-  };
-  useEffect(() => {
-    socket.on('stream', (data) => {
-      setStreams(data);
 
+  useEffect(() => {
+    socket.once('playerLoaded', (data) => {
+      setStreams(data);
       console.log(data);
     });
   }, []);
+
+  socket.once('onStreamAdd',data=>{
+    setStreams([...streams,data]);
+  })
 
   const videoJsOptions = {
     autoplay: true,
