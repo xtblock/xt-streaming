@@ -25,6 +25,14 @@ body {
 .profile {
   z-index: 2;
 }
+.pl-10{
+  padding-left: 130px;
+  padding-top: 30px;
+  font-size: medium;
+}
+.tuned{
+  font-size: large;
+}
 
 .banner {
   background: url(./assets/b94955f2-b9f6-4200-8179-3bdf5e032bdf-profile_banner-480.jpeg);

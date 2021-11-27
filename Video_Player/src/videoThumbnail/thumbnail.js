@@ -1,6 +1,7 @@
 import React, {forwardRef, useState, useEffect, useImperativeHandle } from 'react';
 import './thumbnail.css';
 import VideoJS from '../videoPlayer/VideoJS';
+import Moment from 'react-moment';
 export const Thumbnail = forwardRef((props, ref) => {
   const streams = props.images;
   const [source, setSource] = useState('');
@@ -44,9 +45,9 @@ export const Thumbnail = forwardRef((props, ref) => {
 
   return (
     <div className='row'>
-      { streams.map((item) => {
+      { [...streams].reverse().map((item,index) => {
         return (
-          <div className='col-md-3 mb-4' key={item}>
+          <div className='col-md-3 mb-4' key={index}>
             <div className='stream'>
               <div className='thumb'>
                 {item === source ? (
@@ -101,7 +102,7 @@ export const Thumbnail = forwardRef((props, ref) => {
                         }
                         alt=''
                       />
-                      8 min ago
+                    <Moment toNow>{Date(Date.now).toString()}</Moment>
                     </span>
                   </span>
                 </div>

@@ -3,7 +3,7 @@ import 'video.js/dist/video-js.css';
 import React, { useState, useEffect } from 'react';
 import qualitySelector from 'videojs-hls-quality-selector';
 import qualityLevels from 'videojs-contrib-quality-levels';
-import './VideoJs.css';
+//import './VideoJs.css';
 export const VideoJS = (props) => {
   const videoRef = React.useRef(null);
   const { options, toggle } = props;
@@ -13,21 +13,20 @@ export const VideoJS = (props) => {
   // from the DOM when calling the dispose() method on a player
   const VideoHtml = (props) => (
     <div data-vjs-player>
-      <video id="video_player"ref={videoRef} className='video-js vjs-big-play-centered' />
-    </div>
+      <video-js  id="video_player" ref={videoRef} />
+     </div>
   );
 
   React.useEffect(() => {
     const videoElement = videoRef.current;
     let player;
+
     if (videoElement) {
       player = videojs(videoElement, options, () => {
         console.log('player is ready');
             player.hlsQualitySelector({
         displayCurrentQuality: true,
     });
-    player.liveTracker.options_.playerOptions.liveui=true;
-    console.log(player.liveTracker.options_.playerOptions.liveui)
       });
     }
     player.on('playing', () => {

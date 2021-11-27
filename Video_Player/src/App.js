@@ -4,24 +4,22 @@ import React, { useState, useEffect } from 'react';
 import VideoJS from './videoPlayer/VideoJS';
 import io from 'socket.io-client';
 import Thumbnail from './videoThumbnail/thumbnail';
-import Axios from 'axios';
-import hls from 'parse-hls'
 
 function App() {
   const [streams, setStreams] = useState([]);
   const thumbRef = React.useRef(null);
   const [url, setUrl] = useState('');
   useEffect(() => {
-    document.title = "XT-STREAMING V1"
-  }, [])
-  
+    document.title = 'XT-STREAMING V1';
+  }, []);
+
   const socket = io(config.Transcoding_Tool, {
     cors: {
       origin: '*',
     },
   });
   const streamSelection = (stream) => {
- /*    if (source == stream) {
+    /*    if (source == stream) {
       // setUrl(``);
       setSource('');
       return;
@@ -56,13 +54,14 @@ console.log(isLive)
   
   const videoJsOptions = {
     autoplay: true,
-    controls: false,
+    controls: true,
     fluid: true,
     responsive: true,
     height: '640',
-   
+    liveui: true,
     // width: '900',
-
+    errorDisplay: false,
+    liveTracker: { trackingThreshold: 5 },
     plugins: {},
 
     sources: [
@@ -78,7 +77,7 @@ console.log(isLive)
     // const ref = thumbRef.current && thumbRef.current.children[0];
     // console.log('ref', ref);
     thumbRef.current.togglePlayback(isPlaying);
-  }
+  };
 
   return (
     <div>
@@ -98,7 +97,7 @@ console.log(isLive)
               <div className='col-md-5 px-5 align-self-center text'>
                 <h3>XT-STREAMING V1</h3>
                 <p>
-                XTblock's  <span>Decentralised Live Streaming Technology</span>
+                  XTblock's <span>Decentralised Live Streaming Technology</span>
                 </p>
               </div>
               <div className='col-md-6 align-self-center  buttons'>
@@ -133,7 +132,10 @@ console.log(isLive)
         </div>
         <div className='row' style={{ height: '645px' }}>
           <div id='video_container'>
-            <VideoJS options={videoJsOptions} toggle = {(bool) => togglePlayback(bool)} />
+            <VideoJS
+              options={videoJsOptions}
+              toggle={(bool) => togglePlayback(bool)}
+            />
           </div>
         </div>
         <div className='row my-5 Sub-tittle_default'>
@@ -148,8 +150,12 @@ console.log(isLive)
             <div className='rect_4' />
           </div>
         </div>
-        <div className='row ' >
-       <Thumbnail ref={thumbRef}   images ={streams} changeSource={item => streamSelection(item)}/>
+        <div className='row '>
+          <Thumbnail
+            ref={thumbRef}
+            images={streams}
+            changeSource={(item) => streamSelection(item)}
+          />
         </div>
       </div>
       <div className='margin100' />
