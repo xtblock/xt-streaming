@@ -12,6 +12,7 @@ function App() {
     document.title = "XT-STREAMING V1"
   }, [])
   
+ 
   const socket = io(config.Transcoding_Tool, {
     cors: {
       origin: '*',
@@ -34,19 +35,23 @@ function App() {
       console.log(data);
     });
   }, []);
-
+  
   socket.once('onStreamAdd',data=>{
     setStreams([...streams,data]);
-  })
-
+  });
+ useEffect(() => {
+   
+ } ,[streams]);
   const videoJsOptions = {
     autoplay: true,
     controls: true,
     fluid: true,
     responsive: true,
     height: '640',
+    liveui: true,
     // width: '900',
-
+    errorDisplay: false,
+    liveTracker: {trackingThreshold: 5},
     plugins: {},
 
     sources: [
