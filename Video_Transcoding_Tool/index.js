@@ -48,6 +48,7 @@ const streamFiles = async () => {
           time: stats.birthtime,
         });
         // console.log(streamTotal)
+        
       }
     }
   } catch (e) {
@@ -71,10 +72,10 @@ const streamFiles = async () => {
     });
   }); */
 };
-io.on('connection', async (socket) => {
-  streamTotal = [];
 
-  await streamFiles();
+io.on('connection', async (socket) => {
+const fileExists = await streamFiles();
+console.log(fileExists, 'check fileExists');
   console.log(streamTotal, 'after');
   socket.emit('playerLoaded', streamTotal);
   /*   streamFiles().then(() => {
@@ -97,7 +98,7 @@ var ffmpegConnection = net.connect(
     });
   },
 );
-ffmpegConnection.on('data', async (data) => {
+ffmpegConnection.on('data', (data) => {
   // streamTotal.push(data.toString());
 
   console.log(data.toString(), 'check');
@@ -105,49 +106,28 @@ ffmpegConnection.on('data', async (data) => {
   let streamName = streamId;
   let id = parseInt(streamId.match(/\d+/)[0]);
 
-  /*  const checkStreamName = (streamName) => {
-    if (streamTotal.includes(streamName)) {
-      increaseNumber();
-    } else {
-      ffmpeg(streamName);
-      socketEmit(streamName);
-    }
-  }; */
-  const CheckExisting = () => {
-    return streamTotal.find((id, index) => {
+  // streamName = streamId.replace(/\d+/, id);
+
+  const idExistsAlready = (streamName) => {
+    for (const id of streamTotal) {
       if (id.name === streamName) {
         return true;
+      } else {
+        return false;
       }
-    });
+    }
   };
-
-  const increaseStreamId = async () => {
-    id++;
-    streamName = streamId.replace(/\d+/, id);
-    console.log(CheckExisting(), 'check1');
-    if (CheckExisting()) {
-      increaseStreamId();
+  const checkStreamExists = () => {
+    if (idExistsAlready(streamName)) {
+      streamName = streamId.replace(/\d+/, id);
+      id++;
+      checkStreamExists();
     } else {
       ffmpeg(streamName);
       socketEmit(streamName);
     }
   };
-
-  let folders = await fs.readdir(mediaPath);
-
-  console.log(folders.length);
-
-  if (folders.length !== 0) {
-    if (CheckExisting()) {
-      increaseStreamId();
-    } else {
-      ffmpeg(streamName);
-      socketEmit(streamName);
-    }
-  } else {
-    ffmpeg(streamName);
-    socketEmit(streamName);
-  }
+  checkStreamExists();
 });
 const socketEmit = (streamName) => {
   const intervalObj = setInterval(async () => {
@@ -160,12 +140,11 @@ const socketEmit = (streamName) => {
 
       // let streamCreated;
       if (fileExists) {
-        console.log('emit times');
-        // streamTotal.push()
-        io.sockets.emit('onStreamAdd', {
+         streamTotal.push({
           name: streamName,
           time: stats.birthtime,
-        });
+        })
+        io.sockets.emit('onStreamAdd', streamTotal);
         clearInterval(intervalObj);
       }
     } catch (e) {

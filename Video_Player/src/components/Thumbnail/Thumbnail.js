@@ -6,40 +6,58 @@ import React, {
   useContext,
 } from 'react';
 import moment from 'moment';
+
 import io from 'socket.io-client';
 import config from '../../config.json';
 import './Thumbnail.css';
-import Context from '../../Context';
+import { Context } from "./../../Context";
 const socket = io(config.Transcoding_Tool);
 const playBtn = require('../../assets/Mediamodifier-Design-2.svg').default;
 const pauseBtn = require('../../assets/pause-circle.svg').default;
 const Thumbnail = forwardRef((props, ref) => {
-  const [playerbtnName, setPlayerbtnName] = React.useState(playBtn);
+  // const [playerbtnName, setPlayerbtnName] = React.useState(playBtn);
   const [streamList, setStreamList] = React.useState([]);
   const [current, setCurrent] = React.useState('');
-
+  // const [context, setContext] = useContext(Context);
   const [source, setSource] = React.useState('');
+  const getUniqueList = async (unSortedArray, key) => {
+    return [
+      ...new Map(unSortedArray.map((item) => [item[key], item])).values(),
+    ];
+  };
+  const arrangeDate = async (list, connectionInfo) => {
+    const unSortedArray = list;
+    const uniqueArray = await getUniqueList(unSortedArray, 'name');
+    const sortedArray = uniqueArray.sort(
+      (a, b) => new Date(b.time) - new Date(a.time),
+    );
+    if ('playerLoaded' === connectionInfo) {
+      setStreamList(sortedArray);
+      props.changeUrl(sortedArray[0].name);
+      // setContext(sortedArray.length)
+    } else {
+      setStreamList(sortedArray);
+      // setContext(sortedArray.length)
+    }
+
+    console.log(sortedArray, 'sorted');
+  };
+
   useEffect(() => {
-    socket.once('playerLoaded', (list) => {
+    socket.off('playerLoaded').on('playerLoaded', (list) => {
       if (Array.isArray(list)) {
-        setStreamList(list);
-        console.log(list);
+        if (!(list.length === 0)) {
+          arrangeDate(list, 'playerLoaded');
+        }
+        console.log(list, 'unsorted');
       }
     });
   }, []);
+;
 
-  socket.once('onStreamAdd', (newList) => {
-    console.log('newlist', newList);
-    if (!streamList.includes(newList)) {
-      let newStreamList = [...streamList];
-
-      // setStreamList([...streamList,newList]);
-      newStreamList.push(newList);
-      setStreamList(newStreamList);
-      console.log(streamList, 'streamList');
-    } else {
-      console.log('duplicate is found');
-    }
+  socket.off('onStreamAdd').once('onStreamAdd', (newList) => {
+    arrangeDate(newList);
+    console.log(newList, 'newStreamList');
   });
 
   const [thumbnail_player_btn, setThumbnail_player_btn] =
@@ -67,13 +85,14 @@ const Thumbnail = forwardRef((props, ref) => {
     return m2;
   };
 
-  let image = 1;
+  let counter = 1;
 
   const getImage = () => {
-    if (image > 3) {
-      return 1;
+    if (counter > 3) {
+      counter = +1;
+      return counter;
     } else {
-      return image++;
+      return counter++;
     }
   };
 
@@ -90,7 +109,7 @@ const Thumbnail = forwardRef((props, ref) => {
 
   return (
     <div className='row'>
-      {[...streamList].reverse().map((list) => {
+      {[...streamList].map((list) => {
         return (
           <div className='col-md-3 mb-4' key={list.name}>
             <div className='stream'>

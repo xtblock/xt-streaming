@@ -1,7 +1,50 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import './Header.css';
+import { Context } from "../../Context";
+import io from 'socket.io-client';
+import config from '../../config.json';
+const socket = io(config.Transcoding_Tool);
+function Header(props) {
+   const [count, setCount] = React.useState(0);
 
-function Header() {
+  const getUniqueList = async (unSortedArray, key) => {
+    return [
+      ...new Map(unSortedArray.map((item) => [item[key], item])).values(),
+    ];
+  };
+  const arrangeDate = async (list, connectionInfo) => {
+    const unSortedArray = list;
+    const uniqueArray = await getUniqueList(unSortedArray, 'name');
+    const sortedArray = uniqueArray.sort(
+      (a, b) => new Date(b.time) - new Date(a.time),
+    );
+    if ('playerLoaded' === connectionInfo) {
+      setCount(sortedArray.length);
+      // setContext(sortedArray.length)
+    } else {
+      setCount(sortedArray.length);
+      // setContext(sortedArray.length)
+    }
+
+
+  };
+
+  React.useEffect(() => {
+    socket.off('playerLoaded').on('playerLoaded', (list) => {
+      if (Array.isArray(list)) {
+        if (!(list.length === 0)) {
+          arrangeDate(list, 'playerLoaded');
+        }
+
+      }
+    });
+  }, []);
+;
+
+  socket.off('onStreamAdd').once('onStreamAdd', (newList) => {
+    arrangeDate(newList);
+
+  });
   return (
     <div className='row banner'>
       <div className='bg-gradient' />
@@ -22,7 +65,7 @@ function Header() {
               <div className='col-md-10'>
                 <div className='banner_btn pl-5 '>
                   <button className='btn-left px-2'>
-                    VIDEOS <span>streams.length</span>
+                    VIDEOS <span>{count}</span>
                   </button>
                   {/* <button className='btn-center px-2'>
                         FOLLOWERS <span>4,889,255</span>
