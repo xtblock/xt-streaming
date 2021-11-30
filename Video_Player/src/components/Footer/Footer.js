@@ -1,7 +1,7 @@
-import React from 'react'
-import './Footer.css'
+import React from 'react';
+import './Footer.css';
 function Footer() {
-    return ( 
+  return (
     <footer>
       <div className='copyright'>
         <div className='container'>
@@ -77,8 +77,8 @@ function Footer() {
         </div>
       </div>
       <div className='margin40' />
-    </footer> 
-    )
+    </footer>
+  );
 }
 
-export default Footer
+export default Footer;

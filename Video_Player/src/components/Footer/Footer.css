@@ -1,119 +1,117 @@
-
-    /* Margining
+/* Margining
 	-------------------------------------------------------------- */
-  .margin5,
-  .margin10,
-  .margin15,
-  .margin20,
-  .margin25,
-  .margin30,
-  .margin35,
-  .margin40,
-  .margin45,
-  .margin50,
-  .margin55,
-  .margin60,
-  .margin65,
-  .margin70,
-  .margin75,
-  .margin80,
-  .margin85,
-  .margin90,
-  .margin100 {
-    width: 100%;
-    clear: both;
-    background-color: transparent;
-  }
-  .margin5 {
-    height: 5px;
-  }
-  .margin10 {
-    height: 10px;
-  }
-  .margin15 {
-    height: 15px;
-  }
-  .margin20 {
-    height: 20px;
-  }
-  .margin25 {
-    height: 25px;
-  }
-  .margin30 {
-    height: 30px;
-  }
-  .margin35 {
-    height: 35px;
-  }
-  .margin40 {
-    height: 40px;
-  }
-  .margin45 {
-    height: 45px;
-  }
-  .margin50 {
-    height: 50px;
-  }
-  .margin55 {
-    height: 55px;
-  }
-  .margin60 {
-    height: 60px;
-  }
-  .margin65 {
-    height: 65px;
-  }
-  .margin70 {
-    height: 70px;
-  }
-  .margin75 {
-    height: 75px;
-  }
-  .margin80 {
-    height: 80px;
-  }
-  .margin85 {
-    height: 85px;
-  }
-  .margin90 {
-    height: 90px;
-  }
-  .margin100 {
-    height: 100px;
-  }
-    /*----*****---- << Footer >> ----*****----*/
-    .copyright {
-      padding: 20px 0;
-      padding-bottom: 3px;
-      color: #fff;
-      border-top: 1px solid #03eac2;
-    }
-    footer {
-      background-color: #060b1f;
-    }
-    .copyright p {
-      float: left;
-      margin-top: 9px;
-    }
-    
-    footer .button.ico {
-      float: right;
-    }
-    
-    .copyright .social-media {
-      float: right;
-      margin-bottom: 0;
-    }
-    .social-media > li {
-      display: inline;
-      position: relative;
-      left: 20px;
-      
-    }
-    .copyright .social-media li a {
-      color: #03eac2;
-      font-size: 26px;
-      height: 50px;
-      line-height: 40px;
-      width: 40px;
-    }
+.margin5,
+.margin10,
+.margin15,
+.margin20,
+.margin25,
+.margin30,
+.margin35,
+.margin40,
+.margin45,
+.margin50,
+.margin55,
+.margin60,
+.margin65,
+.margin70,
+.margin75,
+.margin80,
+.margin85,
+.margin90,
+.margin100 {
+  width: 100%;
+  clear: both;
+  background-color: transparent;
+}
+.margin5 {
+  height: 5px;
+}
+.margin10 {
+  height: 10px;
+}
+.margin15 {
+  height: 15px;
+}
+.margin20 {
+  height: 20px;
+}
+.margin25 {
+  height: 25px;
+}
+.margin30 {
+  height: 30px;
+}
+.margin35 {
+  height: 35px;
+}
+.margin40 {
+  height: 40px;
+}
+.margin45 {
+  height: 45px;
+}
+.margin50 {
+  height: 50px;
+}
+.margin55 {
+  height: 55px;
+}
+.margin60 {
+  height: 60px;
+}
+.margin65 {
+  height: 65px;
+}
+.margin70 {
+  height: 70px;
+}
+.margin75 {
+  height: 75px;
+}
+.margin80 {
+  height: 80px;
+}
+.margin85 {
+  height: 85px;
+}
+.margin90 {
+  height: 90px;
+}
+.margin100 {
+  height: 100px;
+}
+/*----*****---- << Footer >> ----*****----*/
+.copyright {
+  padding: 20px 0;
+  padding-bottom: 3px;
+  color: #fff;
+  border-top: 1px solid #03eac2;
+}
+footer {
+  background-color: #060b1f;
+}
+.copyright p {
+  float: left;
+  margin-top: 9px;
+}
+
+footer .button.ico {
+  float: right;
+}
+
+.copyright .social-media {
+  float: right;
+  margin-bottom: 0;
+}
+.social-media > li {
+  display: inline;
+  position: relative;
+  left: 20px;
+}
+.copyright .social-media li a {
+  color: #03eac2;
+  font-size: 26px;
+  height: 50px;
+  line-height: 40px;
+  width: 40px;
+}

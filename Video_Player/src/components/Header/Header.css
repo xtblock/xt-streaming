@@ -1,52 +1,52 @@
 .profile {
-    z-index: 2;
-  }
-  
-.banner_btn{
-      text-align:right;
-  }
-  .bg-gradient{
-    background: black;
-    position: absolute;
-    height: 100%;
-    opacity: 0.7;
+  z-index: 2;
+}
+
+.banner_btn {
+  text-align: right;
+}
+.bg-gradient {
+  background: black;
+  position: absolute;
+  height: 100%;
+  opacity: 0.7;
 }
 
 .banner {
-    background: url('../../assets//b94955f2-b9f6-4200-8179-3bdf5e032bdf-profile_banner-480.jpeg');
-    background-position: center;
-    background-position-y: 80%;
-    background-position-x: 80%;
-    position: relative;
-    background-size: cover;
-  }
+  background: url('../../assets//b94955f2-b9f6-4200-8179-3bdf5e032bdf-profile_banner-480.jpeg');
+  background-position: center;
+  background-position-y: 80%;
+  background-position-x: 80%;
+  position: relative;
+  background-size: cover;
+}
 
 button {
-    background-color: black;
-    border: 1px solid #03eac2;
-    border-radius: 0%;
-    text-decoration: none;
-    color: #03eac2;
-  }
+  background-color: black;
+  border: 1px solid #03eac2;
+  border-radius: 0%;
+  text-decoration: none;
+  color: #03eac2;
+}
 
-  button:hover {
-    background-color: white;
-    color: black;
-  }
-  
-  .btn-left {
-    margin-right: -4px;
-    border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;
-  }
-  
-  .btn-right {
-    margin-left: -5px;
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
-  }
-  
-  .btn-center {
-    border-right: none;
-    border-left: none;
-  }
+button:hover {
+  background-color: white;
+  color: black;
+}
+
+.btn-left {
+  margin-right: -4px;
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+}
+
+.btn-right {
+  margin-left: -5px;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.btn-center {
+  border-right: none;
+  border-left: none;
+}

@@ -18,7 +18,7 @@ const Thumbnail = forwardRef((props, ref) => {
   const [streamList, setStreamList] = React.useState([]);
   const [current, setCurrent] = React.useState('');
 
-const [source,setSource]= React.useState('');
+  const [source, setSource] = React.useState('');
   useEffect(() => {
     socket.once('playerLoaded', (list) => {
       if (Array.isArray(list)) {
@@ -42,27 +42,23 @@ const [source,setSource]= React.useState('');
     }
   });
 
-
   const [thumbnail_player_btn, setThumbnail_player_btn] =
     React.useState(playBtn);
 
   const thumb_button = () => {
     console.log('thumb_button');
-      var myPlayer = document
+    var myPlayer = document
       .getElementById('video_player')
       .getElementsByTagName('video')[0];
     //   setThumbnail_player_btn(pauseBtn)
 
     if (myPlayer.paused) {
-        
-     
       myPlayer.play();
-    //   setBtn(list)
+      //   setBtn(list)
     } else {
       myPlayer.pause();
-    //   setBtn(list)
+      //   setBtn(list)
     }
-    
   };
 
   const streamTime = (time) => {
@@ -92,9 +88,6 @@ const [source,setSource]= React.useState('');
     },
   }));
 
-
-
-
   return (
     <div className='row'>
       {[...streamList].reverse().map((list) => {
@@ -111,25 +104,29 @@ const [source,setSource]= React.useState('');
                     }
                     alt=''
                   />
-                 {source === list.name ? (<img
-                    className={`thumbnail_btn pause`}
-                    src={pauseBtn}
-                    alt=''
-                    onClick={() => {
-                      thumb_button();
-                      setSource('');
-                    }}
-                  /> ): (<img
-                  className={`thumbnail_btn play`}
-                  src={playBtn}
-                  alt=''
-                  onClick={() => {
-                    props.changeUrl(list.name);
-                      setSource(list.name);
-                      setCurrent(list.name);
-                    thumb_button();
-                  }}
-                />)}
+                  {source === list.name ? (
+                    <img
+                      className={`thumbnail_btn pause`}
+                      src={pauseBtn}
+                      alt=''
+                      onClick={() => {
+                        thumb_button();
+                        setSource('');
+                      }}
+                    />
+                  ) : (
+                    <img
+                      className={`thumbnail_btn play`}
+                      src={playBtn}
+                      alt=''
+                      onClick={() => {
+                        props.changeUrl(list.name);
+                        setSource(list.name);
+                        setCurrent(list.name);
+                        thumb_button();
+                      }}
+                    />
+                  )}
                 </div>
               </div>
               <div className='text'>

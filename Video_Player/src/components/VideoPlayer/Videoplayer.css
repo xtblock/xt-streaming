@@ -1,23 +1,22 @@
-.vjs-icon-play:before, .video-js , .video-js .vjs-big-play-button .vjs-icon-placeholder:before{
-   
-    color: #03eac2 !important;
+.vjs-icon-play:before,
+.video-js,
+.video-js .vjs-big-play-button .vjs-icon-placeholder:before {
+  color: #03eac2 !important;
 }
 
-.vjs-big-play-centered .vjs-big-play-button{
-    height:100px !important;
-    width: 100px !important;
-    border-radius: 50% !important;
-    border: 5px solid #03eac2 !important;
+.vjs-big-play-centered .vjs-big-play-button {
+  height: 100px !important;
+  width: 100px !important;
+  border-radius: 50% !important;
+  border: 5px solid #03eac2 !important;
 }
 .video-js .vjs-big-play-button .vjs-icon-placeholder:before {
-    transform: translate(1%, 30%) !important;
-
+  transform: translate(1%, 30%) !important;
 }
 
-.video-js .vjs-big-play-button{
-    background-color: transparent !important;
+.video-js .vjs-big-play-button {
+  background-color: transparent !important;
 }
-.video-js .vjs-play-progress{
-background-color: #03eac2 !important;
-
+.video-js .vjs-play-progress {
+  background-color: #03eac2 !important;
 }

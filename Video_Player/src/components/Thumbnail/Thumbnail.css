@@ -1,44 +1,38 @@
 .thumbnail {
-    width: 100%;
-    height: auto;
-    width: 100%;
-    max-height: none;
-    margin: -9.375% 0px;
-  
-  }
-  
-  .thumb {
-    overflow: hidden;
-    display: block;
-    margin-bottom: 20px;
+  width: 100%;
+  height: auto;
+  width: 100%;
+  max-height: none;
+  margin: -9.375% 0px;
+}
 
-  }
-  
-  .thumb_heading {
-    color: white;
-    font: 900 16px/22px Dosis;
-  }
-  
-  .time {
-    color: #aaa;
-    font-size: 12px;
-  }
+.thumb {
+  overflow: hidden;
+  display: block;
+  margin-bottom: 20px;
+}
 
- 
-  .thumbnail_img{
+.thumb_heading {
+  color: white;
+  font: 900 16px/22px Dosis;
+}
+
+.time {
+  color: #aaa;
+  font-size: 12px;
+}
+
+.thumbnail_img {
   position: relative;
   text-align: center;
-  }
-  .thumbnail_btn{
-      height: 100px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-
- 
-
-  }
- .pause{
-   height: 40px;
- }
+}
+.thumbnail_btn {
+  height: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.pause {
+  height: 40px;
+}
