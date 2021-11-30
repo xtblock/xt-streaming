@@ -1,360 +1,95 @@
 body {
-  background-image: url('./assets/bg.jpg');
+    background-image: url('./assets//bg.jpg');
 }
 
 .container {
-  height: 150;
-  background-color: #060b1f;
-  width: 1170px !important;
-}
-
-.bg-gradient {
-  background-color: black;
-  position: absolute;
-  height: 100%;
-  opacity: 0.7;
-}
-
-.profile {
-  z-index: 2;
-}
-.pl-10{
-  padding-left: 130px;
-  padding-top: 30px;
-  font-size: medium;
-}
-.tuned{
-  font-size: large;
-}
-
-.banner {
-  background: url(./assets/b94955f2-b9f6-4200-8179-3bdf5e032bdf-profile_banner-480.jpeg);
-  background-position: center;
-  background-position-y: 80%;
-  background-position-x: 80%;
-  position: relative;
-  background-size: cover;
-}
-
-a {
-  text-decoration: none !important;
-}
-
-.banner_btn {
-  text-align: right;
-}
-
-button {
-  background-color: black;
-  border: 1px solid #03eac2;
-  border-radius: 0%;
-  text-decoration: none;
-  color: #03eac2;
-}
-
-button:hover {
-  background-color: white;
-  color: black;
-}
-
-.btn-left {
-  margin-right: -4px;
-  border-top-left-radius: 16px;
-  border-bottom-left-radius: 16px;
-}
-
-.btn-right {
-  margin-left: -5px;
-  border-top-right-radius: 16px;
-  border-bottom-right-radius: 16px;
-}
-
-.btn-center {
-  border-right: none;
-  border-left: none;
-}
-
-button span {
-  color: rgb(187, 187, 187);
-}
-
-.tittle_default {
-  margin-top: 6%;
-  display: flex;
-}
-
-.rect_1 {
-  height: 30px;
-  background-color: #03eac2;
-  width: 10px;
-  transform: skewX(-10deg);
-}
-
-.rect_2 {
-  height: 30px;
-  background-color: #03eac2 !important;
-  color: black;
-  width: 230px;
-  margin-left: 4px;
-  transform: skewX(-10deg);
-  text-align: center;
-  font: 800 18px/33px Dosis, sans-serif;
-  padding: 0 1px;
-}
-
-.rect_2 p {
-  transform: skewX(10deg) !important;
-}
-
-.rect_3 {
-  width: 100%;
-  border-bottom: 1px solid #03eac2;
-  margin-left: -5px;
-}
-
-.Sub-tittle_default {
-  margin-top: 6%;
-  display: flex;
-}
-
-#video_container {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
-  position: relative;
-  height: 700px;
-}
-
-#poster {
-  position: absolute;
-  width: 100%;
-}
-
-.Sub-tittle_default .rect_1 {
-  height: 30px;
-  background-color: #03eac2;
-  width: 10px;
-  transform: skewX(-10deg);
-}
-
-.Sub-tittle_default .rect_2 {
-  height: 30px;
-  background-color: #0f1845;
-  color: black;
-  width: 275px;
-  margin-left: 4px;
-  transform: skewX(-10deg);
-  text-align: center;
-}
-
-.Sub-tittle_default .rect_2 p {
-  position: relative;
-  bottom: 10%;
-  font-weight: bolder;
-}
-
-.Sub-tittle_default .rect_3 {
-  height: 30px;
-  background-color: transparent;
-  width: 150px;
-  color: #03eac2;
-  transform: skewX(-10deg);
-  text-align: center;
-  border: 1px solid #03eac2;
-  margin-left: 0px;
-}
-
-.Sub-tittle_default .rect_3 p {
-  position: relative;
-  top: 20%;
-  font-size: 12px;
-  transform: skewX(10deg);
-}
-
-.Sub-tittle_default .rect_3:hover {
-  background-color: white;
-  color: black;
-}
-
-.Sub-tittle_default .rect_4 {
-  width: 100%;
-  border-bottom: 1px solid #03eac2;
-  margin-left: -3px;
-}
-
-.thumbnail {
-  width: 100%;
-  height: auto;
-  width: 100%;
-  max-height: none;
-  margin: -9.375% 0px;
-}
-
-.thumb {
-  overflow: hidden;
-  display: block;
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.thumb_heading {
-  color: white;
-  font: 900 16px/22px Dosis;
-}
-
-.time {
-  color: #aaa;
-  font-size: 12px;
-}
-
-.tumbnail_playbutton {
-  position: absolute;
-  margin-top: 50px;
-  margin-left: 130px;
-  height: 50px;
-  width: 50px;
-}
-
-#my-video {
-  position: absolute;
-  width: 100%;
-  height: 640px;
-}
-
-#poster {
-  position: absolute;
-}
-
-.thumb_button_play img {
-  height: 80px;
-  width: 80px;
-  position: absolute;
-  top: 10px;
-  left: 98px;
-}
-.thumb_button_pause img {
-  height: 32px;
-  width: 30px;
-  position: absolute;
-  top: 36px;
-  left: 120px;
+    height:150;
+    background-color: #060b1f;
+    width: 1170px !important;
 }
 
 /* Margining
 	-------------------------------------------------------------- */
-.margin5,
-.margin10,
-.margin15,
-.margin20,
-.margin25,
-.margin30,
-.margin35,
-.margin40,
-.margin45,
-.margin50,
-.margin55,
-.margin60,
-.margin65,
-.margin70,
-.margin75,
-.margin80,
-.margin85,
-.margin90,
-.margin100 {
-  width: 100%;
-  clear: both;
-  background-color: transparent;
-}
-.margin5 {
-  height: 5px;
-}
-.margin10 {
-  height: 10px;
-}
-.margin15 {
-  height: 15px;
-}
-.margin20 {
-  height: 20px;
-}
-.margin25 {
-  height: 25px;
-}
-.margin30 {
-  height: 30px;
-}
-.margin35 {
-  height: 35px;
-}
-.margin40 {
-  height: 40px;
-}
-.margin45 {
-  height: 45px;
-}
-.margin50 {
-  height: 50px;
-}
-.margin55 {
-  height: 55px;
-}
-.margin60 {
-  height: 60px;
-}
-.margin65 {
-  height: 65px;
-}
-.margin70 {
-  height: 70px;
-}
-.margin75 {
-  height: 75px;
-}
-.margin80 {
-  height: 80px;
-}
-.margin85 {
-  height: 85px;
-}
-.margin90 {
-  height: 90px;
-}
-.margin100 {
-  height: 100px;
-}
-
-/*----*****---- << Footer >> ----*****----*/
-.copyright {
-  padding: 20px 0;
-  padding-bottom: 3px;
-  color: #fff;
-  border-top: 1px solid #03eac2;
-}
-footer {
-  background-color: #060b1f;
-}
-.copyright p {
-  float: left;
-  margin-top: 9px;
-}
-
-footer .button.ico {
-  float: right;
-}
-
-.copyright .social-media {
-  float: right;
-  margin-bottom: 0;
-}
-.social-media > li {
-  display: inline;
-  position: relative;
-  left: 20px;
-  
-}
-.copyright .social-media li a {
-  color: #03eac2;
-  font-size: 26px;
-  height: 50px;
-  line-height: 40px;
-  width: 40px;
-}
+    .margin5,
+    .margin10,
+    .margin15,
+    .margin20,
+    .margin25,
+    .margin30,
+    .margin35,
+    .margin40,
+    .margin45,
+    .margin50,
+    .margin55,
+    .margin60,
+    .margin65,
+    .margin70,
+    .margin75,
+    .margin80,
+    .margin85,
+    .margin90,
+    .margin100 {
+      width: 100%;
+      clear: both;
+      background-color: transparent;
+    }
+    .margin5 {
+      height: 5px;
+    }
+    .margin10 {
+      height: 10px;
+    }
+    .margin15 {
+      height: 15px;
+    }
+    .margin20 {
+      height: 20px;
+    }
+    .margin25 {
+      height: 25px;
+    }
+    .margin30 {
+      height: 30px;
+    }
+    .margin35 {
+      height: 35px;
+    }
+    .margin40 {
+      height: 40px;
+    }
+    .margin45 {
+      height: 45px;
+    }
+    .margin50 {
+      height: 50px;
+    }
+    .margin55 {
+      height: 55px;
+    }
+    .margin60 {
+      height: 60px;
+    }
+    .margin65 {
+      height: 65px;
+    }
+    .margin70 {
+      height: 70px;
+    }
+    .margin75 {
+      height: 75px;
+    }
+    .margin80 {
+      height: 80px;
+    }
+    .margin85 {
+      height: 85px;
+    }
+    .margin90 {
+      height: 90px;
+    }
+    .margin100 {
+      height: 100px;
+    }
+    .a{
+        text-decoration: none;
+      }
