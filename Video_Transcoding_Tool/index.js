@@ -74,6 +74,7 @@ const streamFiles = async () => {
 };
 
 io.on('connection', async (socket) => {
+streamTotal=[]
 const fileExists = await streamFiles();
 console.log(fileExists, 'check fileExists');
   console.log(streamTotal, 'after');
