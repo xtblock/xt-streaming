@@ -162,8 +162,7 @@ const Thumbnail = forwardRef((props, ref) => {
                           require('../../assets/history_black_24dp.svg').default
                         }
                         alt=''
-                      />
-                      {streamTime(list.time)}
+                      /> {streamTime(list.time)}
                     </span>
                   </span>
                 </div>
