@@ -1,0 +1,86 @@
+import React,{useContext} from 'react';
+import './Header.css';
+import { Context } from "../../Context";
+import io from 'socket.io-client';
+import config from '../../config.json';
+const socket = io(config.Transcoding_Tool);
+function Header(props) {
+   const [count, setCount] = React.useState(0);
+
+  const getUniqueList = async (unSortedArray, key) => {
+    return [
+      ...new Map(unSortedArray.map((item) => [item[key], item])).values(),
+    ];
+  };
+  const arrangeDate = async (list, connectionInfo) => {
+    const unSortedArray = list;
+    const uniqueArray = await getUniqueList(unSortedArray, 'name');
+    const sortedArray = uniqueArray.sort(
+      (a, b) => new Date(b.time) - new Date(a.time),
+    );
+    if ('playerLoaded' === connectionInfo) {
+      setCount(sortedArray.length);
+      // setContext(sortedArray.length)
+    } else {
+      setCount(sortedArray.length);
+      // setContext(sortedArray.length)
+    }
+
+
+  };
+
+  React.useEffect(() => {
+    socket.off('playerLoaded').on('playerLoaded', (list) => {
+      if (Array.isArray(list)) {
+        if (!(list.length === 0)) {
+          arrangeDate(list, 'playerLoaded');
+        }
+
+      }
+    });
+  }, []);
+;
+
+  socket.off('onStreamAdd').once('onStreamAdd', (newList) => {
+    arrangeDate(newList);
+
+  });
+  return (
+    <div className='row banner'>
+      <div className='bg-gradient' />
+
+      <div className='col-12 p-2 profile'>
+        <div className='row' style={{ color: 'white' }}>
+          <div className='col-md-1 image'>
+            {/* <img height='auto' width='100px' src={'../../assets/'}/> */}
+          </div>
+          <div className='col-md-5 px-5 align-self-center text'>
+            <h3> XT-STREAMING V1</h3>
+            <p>
+              XTblock's <span>Decentralised Live Streaming Technology</span>{' '}
+            </p>
+          </div>
+          <div className='col-md-6 align-self-center  buttons'>
+            <div className='row justify-content-end'>
+              <div className='col-md-10'>
+                <div className='banner_btn pl-5 '>
+                  <button className='btn-left px-2'>
+                    VIDEOS <span>{count}</span>
+                  </button>
+                  {/* <button className='btn-center px-2'>
+                        FOLLOWERS <span>4,889,255</span>
+                      </button>
+                      <button className='btn-right px-2'>
+                        FOLLOWING <span>12</span>
+                      </button> */}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Header;

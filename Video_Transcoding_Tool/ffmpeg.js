@@ -1,15 +1,19 @@
 const config = require('./settings/config.json');
 const spawn = require('child_process').spawn;
-const fs = require('fs');
+const fs = require('fs-extra');
 
-const ffmpeg = async(id) => {
+const ffmpeg = async (id) => {
   const input = config.tcp_address;
   const output = `/home/node/media/${id}`;
-  if (!fs.exists(output,()=>{})) {
+  // const output = `/home/user/Desktop/storage/${id}`;
+  /* if (!fs.exists(output,()=>{})) {
     fs.mkdir(output, {
       recursive: true,
     },()=>{});
-  }
+  } */
+  console.log(id, 'id in ffmpeg');
+  await fs.ensureDir(output);
+
   const no_stream = config.quality.length;
   const source = [
     '-hide_banner',
@@ -109,18 +113,17 @@ const ffmpeg = async(id) => {
   ];
 
   var proc = spawn(`ffmpeg`, args);
-  proc.stdout.on('data', function (data,err) {
-  console.log(err)
+  proc.stdout.on('data', function (data, err) {
+    console.log(err);
   });
-
 
   proc.stderr.on('data', function (data) {
     console.log(data.toString());
   });
 
   proc.on('close', function () {
-    console.log('finished')
-});
+    console.log('finished');
+  });
 };
 
 module.exports = ffmpeg;
