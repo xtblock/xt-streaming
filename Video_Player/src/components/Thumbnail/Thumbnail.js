@@ -20,7 +20,7 @@ const Thumbnail = forwardRef((props, ref) => {
   const [current, setCurrent] = React.useState('');
   // const [context, setContext] = useContext(Context);
   const [source, setSource] = React.useState('');
-  const getUniqueList = async (unSortedArray, key) => {
+  const getUniqueList =  (unSortedArray, key) => {
     return [
       ...new Map(unSortedArray.map((item) => [item[key], item])).values(),
     ];
@@ -82,7 +82,6 @@ const Thumbnail = forwardRef((props, ref) => {
 
   const streamTime = (time) => {
     let m2 = moment(time).fromNow();
-
     return m2;
   };
 
@@ -164,7 +163,6 @@ const Thumbnail = forwardRef((props, ref) => {
                         }
                         alt=''
                       />
-
                       {streamTime(list.time)}
                     </span>
                   </span>
