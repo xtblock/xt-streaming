@@ -29,6 +29,7 @@ function App() {
     liveui: true,
     fluid: true,
     liveTracker: { trackingThreshold: 0 },
+    // muted: true,
     sources: [
       {
         src: `${config.Transcoding_Tool}/media/${urlId}/master.m3u8`,

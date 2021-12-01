@@ -34,6 +34,7 @@ const Thumbnail = forwardRef((props, ref) => {
     if ('playerLoaded' === connectionInfo) {
       setStreamList(sortedArray);
       props.changeUrl(sortedArray[0].name);
+      setCurrent(sortedArray[0].name);
       // setContext(sortedArray.length)
     } else {
       setStreamList(sortedArray);
@@ -99,6 +100,7 @@ const Thumbnail = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     togglePlayback(isPlaying) {
       if (isPlaying) {
+        console.log('current', current);
         setSource(current);
       } else {
         setThumbnail_player_btn(pauseBtn);
