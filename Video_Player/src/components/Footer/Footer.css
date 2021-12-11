@@ -1,20 +1,3 @@
-body {
-  background-image: url('./assets//bg.jpg');
-}
-.pl-10{
-  padding-left: 130px;
-  padding-top: 30px;
-  font-size: medium;
-}
-.tuned{
-  font-size: large;
-}
-.container {
-  height: 150;
-  background-color: #060b1f;
-  width: 1170px !important;
-}
-
 /* Margining
 	-------------------------------------------------------------- */
 .margin5,
@@ -97,6 +80,38 @@ body {
 .margin100 {
   height: 100px;
 }
-.a {
-  text-decoration: none;
+/*----*****---- << Footer >> ----*****----*/
+.copyright {
+  padding: 20px 0;
+  padding-bottom: 3px;
+  color: #fff;
+  border-top: 1px solid #03eac2;
+}
+footer {
+  background-color: #060b1f;
+}
+.copyright p {
+  float: left;
+  margin-top: 9px;
+}
+
+footer .button.ico {
+  float: right;
+}
+
+.copyright .social-media {
+  float: right;
+  margin-bottom: 0;
+}
+.social-media > li {
+  display: inline;
+  position: relative;
+  left: 20px;
+}
+.copyright .social-media li a {
+  color: #03eac2;
+  font-size: 26px;
+  height: 50px;
+  line-height: 40px;
+  width: 40px;
 }
