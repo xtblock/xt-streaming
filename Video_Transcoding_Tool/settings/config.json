@@ -1,30 +1,37 @@
 {
-  "transcodingPort":8085,
-  "tcp_address": "tcp://172.17.0.1:8000",
-  "quality": [
-    {
-      "res": "1920x1080",
-      "bit_rate": "3000k",
-      "buff_size": "3000k",
-      "audio_rate": "96k"
-    },
-    {
-      "res": "1280x720",
-      "bit_rate": "1500k",
-      "buff_size": "1500k",
-      "audio_rate": "96k"
-    },
-    {
-      "res": "852x480",
-      "bit_rate": "500k",
-      "buff_size": "500k",
-      "audio_rate": "96k"
-    },
-    {
-      "res": "640x360",
-      "bit_rate": "400k",
-      "buff_size": "400k",
-      "audio_rate": "48k"
-    }
-  ]
+      "broadcastingPort": 8085,
+      "tcp_Server_address": "tcp://localhost:8002",
+      "tcp_communication_port": 8003,
+      "ipfs": {
+            "host": "localhost",
+            "port": 5001,
+            "protocol": "http",
+            "streamConfigPathIpfs": "/streams/streamConfig.json"
+      },
+      "quality": [
+            {
+                  "res": "1920x1080",
+                  "bit_rate": "3000k",
+                  "buff_size": "3000k",
+                  "audio_rate": "96k"
+            },
+            {
+                  "res": "1280x720",
+                  "bit_rate": "1500k",
+                  "buff_size": "1500k",
+                  "audio_rate": "96k"
+            },
+            {
+                  "res": "852x480",
+                  "bit_rate": "500k",
+                  "buff_size": "500k",
+                  "audio_rate": "96k"
+            },
+            {
+                  "res": "640x360",
+                  "bit_rate": "400k",
+                  "buff_size": "400k",
+                  "audio_rate": "48k"
+            }
+      ]
 }

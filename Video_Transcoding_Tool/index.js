@@ -7,149 +7,106 @@ const net = require('net');
 const fs = require('fs-extra');
 const path = require('path');
 const config = require(path.join(__dirname, './settings/config'));
-const port = config.transcodingPort;
+const port = config.broadcastingPort;
 const ffmpeg = require('./ffmpeg');
+const getData = require('./httpService');
+const { getStreamData, editStreamData } = require('./jsonService');
 const io = require('socket.io')(server, {
-  cors: {
-    orgin: '*',
-  },
+      cors: {
+            orgin: '*',
+      },
+});
+const networkInfo = require('./networkService')[0];
+getStreamData();
+app.get('/', (req, res) => {
+      res.json(`Transcoding Tool`);
+});
+app.get('/streamConfig', async (req, res) => {
+      const file = await getStreamData();
+      res.json(file);
 });
 
-app.get('/', (req, res) => {
-  res.json(`Transcoding Tool`);
-});
-app.get('/media/:stream/:quality', (req, res) => {
-  res.sendFile(`/home/node/media/${req.params.stream}/${req.params.quality}`);
-  // res.sendFile(`/home/user/Desktop/storage/${req.params.stream}/${req.params.quality}`);
+app.get('/media/:channel/:stream/:quality', (req, res) => {
+      res.sendFile(
+            path.join(
+                  __dirname,
+                  `./media/${req.params.channel}/${req.params.stream}/${req.params.quality}`,
+            ),
+      );
+      // res.sendFile(`/home/user/Desktop/storage/${req.params.stream}/${req.params.quality}`);
 });
 server.listen(port, () => {
-  console.log('server running on ', port);
+      console.log('server running on ', port);
 });
 
 let streamTotal = [];
-const mediaPath = path.join('/home/node/media/');
-//const mediaPath = path.join('/home/user/Desktop/storage/');
-const streamFiles = async () => {
-  try {
-    await fs.ensureDir(mediaPath);
-    const files = await fs.readdir(mediaPath);
-    for (const file of files) {
-      const pathExists = await fs.pathExists(
-        `${mediaPath}/${file}/master.m3u8`,
-      );
-
-      if (pathExists) {
-        const stats = await fs.stat(`${mediaPath}/${file}/master.m3u8`);
-
-        // console.log(file,pathExists,stats.birthtime,'check')
-
-        streamTotal.push({
-          name: file,
-          time: stats.birthtime,
-        });
-        // console.log(streamTotal)
-        
-      }
-    }
-  } catch (e) {
-    console.log(e);
-  }
-
-  /* fs.readdir(mediaPath, (err, folder) => {
-    if (err) {
-      return console.log('no media folder is found', err);
-    }
-    console.log(folder)
-/*     folder.forEach((stream) => {
-      if (streamTotal.includes(stream) === true) {
-        // console.log('stream already exists')
-      } else {
-        let masterExists = fs.existsSync(`${mediaPath}/${stream}/master.m3u8`);
-        if (masterExists) {
-          streamTotal.push(stream);
-        }
-      }
-    });
-  }); */
-};
+const mediaPath = path.join('/home/node/media');
 
 io.on('connection', async (socket) => {
-streamTotal=[]
-const fileExists = await streamFiles();
-console.log(fileExists, 'check fileExists');
-  console.log(streamTotal, 'after');
-  socket.emit('playerLoaded', streamTotal);
-  /*   streamFiles().then(() => {
-    socket.emit('playerLoaded', streamTotal);
-  }); */
+     await getStreamData();
+      const data = require('./streamConfig.json');
+      // socket.emit('playerLoaded', data);
 });
 
 //  io.sockets.emit('stream', streamTotal);
-const tcpServerUrl = new URL(config.tcp_address);
+const tcpServerUrl = new URL(config.tcp_Server_address);
 var ffmpegConnection = net.connect(
-  {
-    port: tcpServerUrl.port,
-    host: tcpServerUrl.hostname,
-  },
-  () => {
-    console.log('connected to TCP Server');
-    ffmpegConnection.once('end', function () {
-      console.log('disconnected from TCP Server');
-      process.exit(0);
-    });
-  },
+      {
+            port: config.tcp_communication_port,
+            host: tcpServerUrl.hostname,
+      },
+      () => {
+            console.log('connected to TCP Server');
+            ffmpegConnection.write(`${networkInfo}:${tcpServerUrl.port}`);
+            ffmpegConnection.once('end', function () {
+                  console.log('disconnected from TCP Server');
+                  process.exit(0);
+            });
+      },
 );
-ffmpegConnection.on('data', (data) => {
-  // streamTotal.push(data.toString());
 
-  console.log(data.toString(), 'check');
-  streamId = data.toString();
-  let streamName = streamId;
-  let id = parseInt(streamId.match(/\d+/)[0]);
+ffmpegConnection.on('data', async (data) => {
+      console.log(data.toString());
+      await getStreamData();
+      const videoConfig = require('./streamConfig');
 
-  // streamName = streamId.replace(/\d+/, id);
+      const getVideoData = videoConfig.data.find(
+            (obj) => obj.streamKey === data.toString(),
+      );
 
-  const idExistsAlready = (streamName) => {
-    for (const id of streamTotal) {
-      if (id.name === streamName) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  };
-  const checkStreamExists = () => {
-    if (idExistsAlready(streamName)) {
-      streamName = streamId.replace(/\d+/, id);
-      id++;
-      checkStreamExists();
-    } else {
-      ffmpeg(streamName);
-      socketEmit(streamName);
-    }
-  };
-  checkStreamExists();
+      const getStreamName = getVideoData.streams.find(
+            (name) => name.live === true,
+      );
+      console.log(getStreamName);
+      let streamId = getStreamName.streamingName;
+      let channelName = getVideoData.channelName;
+      let streamName = streamId;
+      // let id = parseInt(streamId.match(/\d+/)[0]);
+      ffmpeg(streamName, channelName);
+      socketEmit(streamName, channelName);
 });
-const socketEmit = (streamName) => {
-  const intervalObj = setInterval(async () => {
-    const file = `/home/node/media/${streamName}/master.m3u8`;
-    // const file = `/home/user/Desktop/storage/${streamName}/master.m3u8`;
-    try {
-      const fileExists = await fs.pathExists(file);
-      console.log(fileExists, 'check fileExists');
-      const stats = await fs.stat(`${file}`);
+const socketEmit = (streamName, ChannelName) => {
+      const intervalObj = setInterval(async () => {
+            const file = `./media/${ChannelName}/${streamName}/master.m3u8`;
+            // const file = `/home/user/Desktop/storage/${streamName}/master.m3u8`;
+            try {
+                  const fileExists = await fs.pathExists(file);
+                  const stats = await fs.stat(`${file}`);
 
-      // let streamCreated;
-      if (fileExists) {
-         streamTotal.push({
-          name: streamName,
-          time: stats.birthtime,
-        })
-        io.sockets.emit('onStreamAdd', streamTotal);
-        clearInterval(intervalObj);
-      }
-    } catch (e) {
-      console.log(e, 'error');
-    }
-  }, 2000);
+                  // let streamCreated;
+                  if (fileExists) {
+                        const data = {
+                              channel: ChannelName,
+                              name: streamName,
+                              time: stats.ctimeMs.split('.')[0],
+                              // live : true,
+                        };
+                        await editStreamData('createTimeFrame', data);
+                        io.sockets.emit('onStreamAdd',{channelName : ChannelName,streamName : streamName} );
+                        clearInterval(intervalObj);
+                  }
+            } catch (e) {
+                  console.log(e, 'error');
+            }
+      }, 2000);
 };
