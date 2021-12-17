@@ -1,0 +1,49 @@
+{
+        
+    "data" : [
+        {
+        "channelName": "channelOne",
+        "streamKey": "106.208.35.89",
+        "streams":[
+            {
+                "streamingName": "stream1",
+                "live":true,
+                "photo_thumbnail": "/photo uri/",
+                "video_thumbnail": "/video uri/",
+                "started_timeStamp": "2018-01-01T00:00:00.000Z",
+                "ended_timeStamp": "2018-01-01T00:00:00.000Z"
+            }
+    
+           
+        ]
+        },
+        {
+            "channelName": "channelTwo",
+            "streamKey": "192.168.1.5",
+            "streams":[
+                {
+                    "streamingName": "stream1",
+                    "live":false,
+                    "photo_thumbnail": "/photo uri/",
+                    "video_thumbnail": "/video uri/",
+                    "started_timeStamp": "2018-01-01T00:00:00.000Z",
+                    "ended_timeStamp": "2018-01-01T00:00:00.000Z"
+                },
+                {
+                    "streamingName": "stream1",
+                    "live":true,
+                    "photo_thumbnail": "/photo uri/",
+                    "video_thumbnail": "/video uri/",
+                    "started_timeStamp": "2018-01-01T00:00:00.000Z",
+                    "ended_timeStamp": "2018-01-01T00:00:00.000Z"
+                }
+              
+              
+        
+               
+            ]
+            }
+    ]
+    
+    
+}

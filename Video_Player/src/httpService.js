@@ -1,12 +1,26 @@
 import axios from "axios";
 
-async function getUser() {
+
+
+
+const getData= async ()=> {
     try {
-      const response = await axios.get('/user?ID=12345');
-      console.log(response);
+      const response = await axios.get('http://localhost:8085');
+      // console.log(response);
+      return response.data;
     } catch (error) {
       console.error(error);
     }
   }
 
-    getUser();
+const getJson = async()=>{
+  try{
+    const response = await axios.get('http://localhost:8085/streamConfig');
+    // console.log(response);
+    return response.data;
+  }catch(e){
+    console.log(e);
+  }
+}
+
+export {getData,getJson};

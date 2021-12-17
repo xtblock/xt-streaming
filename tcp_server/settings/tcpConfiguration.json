@@ -1,5 +1,5 @@
 {
-      "main_tcp": "13.234.113.123",
+      "main_tcp": "localhost",
       "ports": {
             "main_server": 8000,
             "main_communication_server": 8001,

@@ -6,6 +6,7 @@ import React, {
   useContext,
 } from 'react';
 import moment from 'moment';
+import * as getService from '../../httpService'
 
 import io from 'socket.io-client';
 import config from '../../config.json';
@@ -44,17 +45,32 @@ const Thumbnail = forwardRef((props, ref) => {
     console.log(sortedArray, 'sorted');
   };
 
-  useEffect(() => {
-    socket.off('playerLoaded').on('playerLoaded', (list) => {
-      if (Array.isArray(list)) {
-        if (!(list.length === 0)) {
-          arrangeDate(list, 'playerLoaded');
-        }
-        console.log(list, 'unsorted');
-      }
-    });
-  }, []);
+  const [liveArr,setLiveArr] =React.useState([])
+
+const live = async()=>{
+  const response= await getService.getJson()
+const json = (JSON.parse(response))
+console.log(json)
+json.data.forEach((e)=>{
+  const liveStream = e.streams.find(obj=>obj.live===true)
+  if(liveStream){
+    const newList = [...liveArr]
+    newList.push(liveStream)
+    setLiveArr(newList)
+  }
+})
+console.log(liveArr)
+
+
+}
+useEffect(() => {
+  socket.off('playerLoaded').on('playerLoaded', (list) => {
+live();
+  });
+}, []);
 ;
+
+
 
   socket.off('onStreamAdd').once('onStreamAdd', (newList) => {
     arrangeDate(newList);
@@ -110,9 +126,9 @@ const Thumbnail = forwardRef((props, ref) => {
 
   return (
     <div className='row'>
-      {[...streamList].map((list) => {
+      {[...liveArr].map((list) => {
         return (
-          <div className='col-md-3 mb-4' key={list.name}>
+          <div className='col-md-3 mb-4' key={list.streamingName}>
             <div className='stream'>
               <div className='thumb'>
                 <div className='thumbnail_img'>
@@ -124,7 +140,7 @@ const Thumbnail = forwardRef((props, ref) => {
                     }
                     alt=''
                   />
-                  {source === list.name ? (
+                  {source === list.streamingName ? (
                     <img
                       className={`thumbnail_btn pause`}
                       src={pauseBtn}
@@ -140,9 +156,9 @@ const Thumbnail = forwardRef((props, ref) => {
                       src={playBtn}
                       alt=''
                       onClick={() => {
-                        props.changeUrl(list.name);
-                        setSource(list.name);
-                        setCurrent(list.name);
+                        props.changeUrl(list.streamingName);
+                        setSource(list.streamingName);
+                        setCurrent(list.streamingName);
                         thumb_button();
                       }}
                     />
@@ -150,7 +166,7 @@ const Thumbnail = forwardRef((props, ref) => {
                 </div>
               </div>
               <div className='text'>
-                <h4 className='thumb_heading mt-3'>LIVE: {list.name} </h4>
+                <h4 className='thumb_heading mt-3'>LIVE: {list.streamingName} </h4>
                 <div className='legend'>
                   <span className='time'>
                     <span>
@@ -162,7 +178,7 @@ const Thumbnail = forwardRef((props, ref) => {
                           require('../../assets/history_black_24dp.svg').default
                         }
                         alt=''
-                      /> {streamTime(list.time)}
+                      /> {streamTime(list.streamingName)}
                     </span>
                   </span>
                 </div>

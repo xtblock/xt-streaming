@@ -25,14 +25,14 @@ function App() {
     autoplay: true,
     controls: true,
     errorDisplay: false,
-    responsive: true,
+    responsive: false,
     liveui: true,
     fluid: true,
     liveTracker: { trackingThreshold: 0 },
     // muted: true,
     sources: [
       {
-        src: `${config.Transcoding_Tool}/media/${urlId}/master.m3u8`,
+        src: `http://localhost:8085/media/channelOne/${urlId}/master.m3u8`,
         type: 'application/x-mpegURL',
       },
     ],

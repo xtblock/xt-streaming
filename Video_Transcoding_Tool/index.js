@@ -19,7 +19,7 @@ const io = require('socket.io')(server, {
 const networkInfo = require('./networkService')[0];
 getStreamData();
 app.get('/', (req, res) => {
-      res.json(`Transcoding Tool`);
+      res.json(`http://localhost:8085`);
 });
 app.get('/streamConfig', async (req, res) => {
       const file = await getStreamData();
@@ -44,8 +44,8 @@ const mediaPath = path.join('/home/node/media');
 
 io.on('connection', async (socket) => {
      await getStreamData();
-      const data = require('./streamConfig.json');
-      // socket.emit('playerLoaded', data);
+      // const data = require('./streamConfig.json');
+       socket.emit('playerLoaded', 'connected');
 });
 
 //  io.sockets.emit('stream', streamTotal);
