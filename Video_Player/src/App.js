@@ -8,18 +8,31 @@ import Videoplayer from './components/VideoPlayer/Videoplayer';
 import Footer from './components/Footer/Footer';
 import Thumbnail from './components/Thumbnail/Thumbnail';
 import { Context } from "./Context.js";
-import config from './config.json';
+import { getData, getJson } from './httpService';
+// import config from './config.json';
 function App() {
 
   useLayoutEffect(() => {
     document.title = 'XT-STREAMING V1';
-    console.log(config);
+    // console.log(config);
+
+    
   }, []);
   // const [context, setContext] = React.useState(0);
   const thumbRef = React.useRef(null);
   const playerRef = React.useRef(null);
   const [urlId, setUrlId] = React.useState('');
+  const [showLive, setshowLive] = React.useState(true);
+  const [host,setHost] = React.useState('');
   // const [count,setCount] = React.useState(0);
+
+useEffect(async()=>{
+const file = await getData()
+console.log(file)
+setHost(file)
+})
+
+
   const videoJsOptions = {
     // lookup the options in the docs for more options
     autoplay: true,
@@ -32,11 +45,13 @@ function App() {
     // muted: true,
     sources: [
       {
-        src: `http://localhost:8085/media/channelOne/${urlId}/master.m3u8`,
+        src: `http://${host}/media/${urlId}/master.m3u8`,
         type: 'application/x-mpegURL',
       },
     ],
   };
+
+
   const handlePlayerReady = (player) => {
     playerRef.current = player;
 
@@ -52,8 +67,10 @@ function App() {
 
     console.log('player status', player);
   };
-
-  const changePlayerOptions = (url) => {
+const changeThumbnails=(val)=>{
+  // setshowLive(val) 
+}
+  const changePlayerOptions = (url,host) => {
     console.log('changePlayerOptions', url);
     // you can update the player through the Video.js player instance
     if (!playerRef.current) {
@@ -63,6 +80,7 @@ function App() {
     //  playerRef.current.src([{src: `${config.Transcoding_Tool}/media/${url}/master.m3u8`, type: 'application/x-mpegURL'}]);
      playerRef.current.autoplay(true);
      setUrlId(url);
+     setHost(host);
   };
   const togglePlayback = (isPlaying) => {
     console.log('thumbref', thumbRef.current);
@@ -77,17 +95,17 @@ function App() {
         <Tuned />
         <Divider title='NOW STREAMING' />
 
-        <Videoplayer
+ <Videoplayer
           options={videoJsOptions}
           onReady={handlePlayerReady}
           toggle={(bool) => togglePlayback(bool)}
         />
-        <Divider recent={true} title='RECENT VIDEOS' />
+        <Divider recent={true} title='RECENT VIDEOS'  getLiveNonLive ={setshowLive}/>
         <Thumbnail
           ref={thumbRef}
- 
+          showLiveThumbnail={showLive}
           playerUrl={urlId}
-          changeUrl={(url) => changePlayerOptions(url)}
+          changeUrl={(url) => changePlayerOptions(url,host)}
         />
 
       </div>

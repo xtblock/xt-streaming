@@ -27,5 +27,5 @@ RUN npm install
 COPY --chown=node:node . .
 
 EXPOSE 8000
-CMD [ "node", "index.js" ]
+CMD [ "node", "sub.js" ]
 # CMD ["pm2-runtime", "index.js"]

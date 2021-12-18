@@ -54,7 +54,9 @@ const sub = () => {
                   console.log('connection to Main server is initiated ');
                   startConnection();
             } else {
-                  eventEmitter.emit('sendIp', data);
+                  transcommSocks.forEach((socket) => {
+                        socket.write(data.toString());
+                  });
             }
       });
       subClientCom.on('error', (err) => {
@@ -75,7 +77,9 @@ const sub = () => {
                         subDataReciever.emit('end');
                   } else {
                         // console.log(data)
-                        eventEmitter.emit('sendData', data);
+                        ffmpegSocks.forEach((socket) => {
+                              socket.write(data);
+                        });
                   }
             });
             eventEmitter.on('endObs', (data) => {
@@ -97,11 +101,11 @@ const sub = () => {
       transcomm.on('connection', (socket) => {
             console.log('connection from transcomm');
             transcommSocks.push(socket);
-            eventEmitter.on('sendIp', (ip) => {
-                  transcommSocks.forEach((socket) => {
-                        socket.write(ip);
-                  });
-            });
+            // eventEmitter.on('sendIp', (ip) => {
+            //       transcommSocks.forEach((socket) => {
+            //             socket.write(ip);
+            //       });
+            // });
             socket.on('data', (data) => {
                   eventEmitter.emit('endObs', data);
             });
@@ -121,12 +125,12 @@ const sub = () => {
       subServer.on('connection', (socket) => {
             console.log('new connection from sub server', socket.remoteAddress);
             ffmpegSocks.push(socket);
-            eventEmitter.on('sendData', (data) => {
-                  // console.log(data)
-                  ffmpegSocks.forEach((socket) => {
-                        socket.write(data);
-                  });
-            });
+            // eventEmitter.once('sendData', (data) => {
+            //       // console.log(data)
+            //       ffmpegSocks.forEach((socket) => {
+            //             socket.write(data);
+            //       });
+            // });
             eventEmitter.on('close', () => {
                   ffmpegSocks.forEach((socket) => {
                         socket.destroy();
@@ -137,4 +141,4 @@ const sub = () => {
             console.log('sub server is listening on port ', sub_tcpPort);
       });
 };
-module.exports = sub;
+sub();

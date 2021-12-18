@@ -19,7 +19,7 @@ const io = require('socket.io')(server, {
 const networkInfo = require('./networkService')[0];
 getStreamData();
 app.get('/', (req, res) => {
-      res.json(`http://localhost:8085`);
+      res.json(`localhost:8085`);
 });
 app.get('/streamConfig', async (req, res) => {
       const file = await getStreamData();
@@ -43,21 +43,21 @@ let streamTotal = [];
 const mediaPath = path.join('/home/node/media');
 
 io.on('connection', async (socket) => {
-     await getStreamData();
+      await getStreamData();
       // const data = require('./streamConfig.json');
-       socket.emit('playerLoaded', 'connected');
+      socket.emit('playerLoaded', 'connected');
 });
 
 //  io.sockets.emit('stream', streamTotal);
 const tcpServerUrl = new URL(config.tcp_Server_address);
-var ffmpegConnection = net.connect(
+var ffmpegConnection = net.createConnection(
       {
             port: config.tcp_communication_port,
             host: tcpServerUrl.hostname,
       },
       () => {
             console.log('connected to TCP Server');
-            ffmpegConnection.write(`${networkInfo}:${tcpServerUrl.port}`);
+            // ffmpegConnection.write(`${networkInfo}:${tcpServerUrl.port}`);
             ffmpegConnection.once('end', function () {
                   console.log('disconnected from TCP Server');
                   process.exit(0);
@@ -66,8 +66,8 @@ var ffmpegConnection = net.connect(
 );
 
 ffmpegConnection.on('data', async (data) => {
-      console.log(data.toString());
       await getStreamData();
+      console.log(data.toString());
       const videoConfig = require('./streamConfig');
 
       const getVideoData = videoConfig.data.find(
@@ -75,15 +75,28 @@ ffmpegConnection.on('data', async (data) => {
       );
 
       const getStreamName = getVideoData.streams.find(
-            (name) => name.live === true,
+            (name) => name.live === undefined,
       );
       console.log(getStreamName);
-      let streamId = getStreamName.streamingName;
-      let channelName = getVideoData.channelName;
-      let streamName = streamId;
-      // let id = parseInt(streamId.match(/\d+/)[0]);
-      ffmpeg(streamName, channelName);
-      socketEmit(streamName, channelName);
+
+      if (getStreamName) {
+            let streamId = getStreamName.streamingName;
+            let channelName = getVideoData.channelName;
+            let streamName = streamId;
+            // // let id = parseInt(streamId.match(/\d+/)[0]);
+            const data = {
+                  channel: channelName,
+                  name: streamName,
+                  time: Date.now(),
+                  live: true,
+            };
+            editStreamData('createTimeFrame', data);
+            ffmpeg(streamName, channelName);
+            socketEmit(streamName, channelName);
+      }
+
+      //  }
+      // console.log(getStreamName[0]);
 });
 const socketEmit = (streamName, ChannelName) => {
       const intervalObj = setInterval(async () => {
@@ -95,14 +108,10 @@ const socketEmit = (streamName, ChannelName) => {
 
                   // let streamCreated;
                   if (fileExists) {
-                        const data = {
-                              channel: ChannelName,
-                              name: streamName,
-                              time: stats.ctimeMs.split('.')[0],
-                              // live : true,
-                        };
-                        await editStreamData('createTimeFrame', data);
-                        io.sockets.emit('onStreamAdd',{channelName : ChannelName,streamName : streamName} );
+                        io.sockets.emit('onStreamAdd', {
+                              channelName: ChannelName,
+                              streamName: streamName,
+                        });
                         clearInterval(intervalObj);
                   }
             } catch (e) {

@@ -4,6 +4,7 @@ import { Context } from "../../Context";
 import io from 'socket.io-client';
 import config from '../../config.json';
 const socket = io(config.Transcoding_Tool);
+
 function Header(props) {
    const [count, setCount] = React.useState(0);
 
@@ -12,38 +13,21 @@ function Header(props) {
       ...new Map(unSortedArray.map((item) => [item[key], item])).values(),
     ];
   };
-  const arrangeDate = async (list, connectionInfo) => {
-    const unSortedArray = list;
-    const uniqueArray = await getUniqueList(unSortedArray, 'name');
-    const sortedArray = uniqueArray.sort(
-      (a, b) => new Date(b.time) - new Date(a.time),
-    );
-    if ('playerLoaded' === connectionInfo) {
-      setCount(sortedArray.length);
-      // setContext(sortedArray.length)
-    } else {
-      setCount(sortedArray.length);
-      // setContext(sortedArray.length)
-    }
 
 
-  };
+
+  
 
   React.useEffect(() => {
     socket.off('playerLoaded').on('playerLoaded', (list) => {
-      if (Array.isArray(list)) {
-        if (!(list.length === 0)) {
-          arrangeDate(list, 'playerLoaded');
-        }
-
-      }
+     
+      
     });
   }, []);
 ;
 
   socket.off('onStreamAdd').once('onStreamAdd', (newList) => {
-    arrangeDate(newList);
-
+   
   });
   return (
     <div className='row banner'>

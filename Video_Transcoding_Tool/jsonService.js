@@ -16,12 +16,15 @@ const getStreamData = async () => {
 
 const createTime = async (data) => {
       const oldJson = require('./streamConfig.json');
+
+      
       let streamsArr =
             oldJson.data[
                   oldJson.data.findIndex(
                         (obj) => obj.channelName === data.channel,
                   )
             ].streams;
+            console.log(streamsArr);
 
       let streamObj =
             streamsArr[
@@ -29,7 +32,8 @@ const createTime = async (data) => {
             ];
       streamObj.streamingName = data.name;
       streamObj.started_timeStamp = data.time;
-      fs.writeFile('./streamConfig.json', JSON.stringify(oldJson));
+      streamObj["live"] = data.live;
+      fs.writeJSON('./streamConfig.json', oldJson);
       await ipfs.files.rm(filePath);
       await ipfs.files.write(filePath, './streamConfig.json', { create: true });
       getStreamData();
@@ -57,15 +61,14 @@ const live = async (data) => {
       getStreamData();
 };
 
-const editStreamData = async (action, data) => {
-      switch (action) {
-            case 'createTimeFrame': {
-                  createTime(data);
-            }
-            case 'live': {
-                  live(data);
-            }
-      }
+const editStreamData =  (action, data) => {
+ 
+     if(action ==='createTimeFrame'){
+       createTime(data);
+     }else{
+            live(data);
+     }
+     
 };
 
 module.exports = { getStreamData, editStreamData };
