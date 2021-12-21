@@ -9,10 +9,9 @@ import moment from 'moment';
 import * as getService from '../../httpService';
 
 import io from 'socket.io-client';
-import config from '../../config.json';
 import './Thumbnail.css';
-import { Context } from './../../Context';
-const socket = io(config.Transcoding_Tool);
+
+
 const playBtn = require('../../assets/Mediamodifier-Design-2.svg').default;
 const pauseBtn = require('../../assets/pause-circle.svg').default;
 const Thumbnail = forwardRef((props, ref) => {
@@ -46,57 +45,64 @@ const Thumbnail = forwardRef((props, ref) => {
 
       //       console.log(sortedArray, 'sorted');
       // };
-
+      
+      const socket = io('13.127.170.126:8085', {
+            cors: {
+                  orgin: '*'
+            }
+      });
       const [liveArr, setLiveArr] = React.useState([]);
       const [nonliveArr, setNonLiveArr] = React.useState([]);
-      const [http,sethttp]=React.useState('');
+      const [http, sethttp] = React.useState('');
 
       console.log(props.showLiveThumbnail, 'showLive');
 
       const live = async () => {
 
-            const host = await getService.getData();
-            const response = await getService.getJson();
-           
-            const json = JSON.parse(response);
 
-              console.log(json);
-            json.data.forEach((e) => {
-                  const liveStream = e.streams.find((obj) => obj.live === true);
+            const json = await getService.getJson()
+            const parsedJson = JSON.parse(json)
 
-                  if (liveStream) {
-                        const NewList = liveStream;
-                        NewList.channelName = e.channelName;
-
-                        const newList = [...liveArr];
-                        // newList.channelName=(e.channelName);
-                        newList.push(NewList);
-                        setLiveArr(newList);
-                        sethttp(host);
-                        console.log(newList);
+            let liveVideos = []
+            for (const live of parsedJson.data) {
+                  const channelName = live.channelName
+                  const lives = live.streams.find(obj => obj.live === true)
+                  if (lives !== undefined) {
+                        lives["channelName"] = channelName
+                        liveVideos.push(lives)
                   }
-            });
-            console.log(liveArr);
+
+            }
+
+
+            let uniq = [...new Set(liveVideos)];
+            setLiveArr(uniq)
+
+            console.log(uniq, "checking live streams")
+
       };
       const nonlive = async () => {
-            const response = await getService.getJson();
+            console.log('nolive')
+            const json = await getService.getJson()
+            const parsedJson = JSON.parse(json)
 
-            const json = JSON.parse(response);
-             
-            json.data.forEach((e) => {
-                  const liveStream = e.streams.find(
-                        (obj) => obj.live === false,
-                  );
-                  if (liveStream) {
-                        const NewList = liveStream;
-                        NewList.channelName = e.channelName;
-                        const newList = [...nonliveArr];
-                        newList.push(NewList);
-                        console.log(newList);
-                        setNonLiveArr(newList);
+            let nonLiveVideos = []
+            for (const live of parsedJson.data) {
+                  const channelName = live.channelName
+                  const nonLives = live.streams.find(obj => obj.live === false)
+                  if (nonLives !== undefined) {
+                        nonLives["channelName"] = channelName
+                        nonLiveVideos.push(nonLives)
                   }
-            });
-            console.log(nonliveArr);
+
+            }
+
+
+            let uniq = [...new Set(nonLiveVideos)];
+            setNonLiveArr(uniq)
+
+            console.log(uniq, "checking live streams")
+
       };
       useEffect(() => {
             socket.off('playerLoaded').on('playerLoaded', (list) => {
@@ -137,7 +143,7 @@ const Thumbnail = forwardRef((props, ref) => {
 
       console.log(props.showLiveThumbnail, 'check');
 
-  console.log(props.showLiveThumbnail, 'showLive');
+      console.log(props.showLiveThumbnail, 'showLive');
 
 
       const getImage = () => {
@@ -164,10 +170,10 @@ const Thumbnail = forwardRef((props, ref) => {
       return (
             <div className='row'>
 
-                  
-            
 
-                  {(props.showLiveThumbnail === true )&&[...liveArr].map((list) => {
+
+
+                  {(props.showLiveThumbnail === true) && [...liveArr].map((list) => {
                         return (
                               <div
                                     className='col-md-3 mb-4'
@@ -179,13 +185,13 @@ const Thumbnail = forwardRef((props, ref) => {
                                                       <img
                                                             className='thumbnail'
                                                             src={
-                                                             list.photo_thumbnail
-                                                                     
+                                                                  list.photo_thumbnail
+
                                                             }
                                                             alt=''
                                                       />
                                                       {source ===
-                                                      `${list.channelName}/${list.streamingName}` ? (
+                                                            `${list.channelName}/${list.streamingName}` ? (
                                                             <img
                                                                   className={`thumbnail_btn pause`}
                                                                   src={pauseBtn}
@@ -204,7 +210,7 @@ const Thumbnail = forwardRef((props, ref) => {
                                                                   alt=''
                                                                   onClick={() => {
                                                                         props.changeUrl(
-                                                                              `${list.channelName}/${list.streamingName}`,http
+                                                                              `${list.channelName}/${list.streamingName}`, http
                                                                         );
                                                                         setSource(
                                                                               `${list.channelName}/${list.streamingName}`,
@@ -220,7 +226,7 @@ const Thumbnail = forwardRef((props, ref) => {
                                           </div>
                                           <div className='text'>
                                                 <h4 className='thumb_heading mt-3'>
-                                                    {list.channelName} :  {list.streamingName}
+                                                      {list.channelName} :  {list.streamingName}
                                                 </h4>
                                                 <div className='legend'>
                                                       <span className='time'>
@@ -232,8 +238,8 @@ const Thumbnail = forwardRef((props, ref) => {
                                                                               fill: 'grey',
                                                                         }}
                                                                         src={
-                                                                          require('../../assets/history_black_24dp.svg').default
-                                                                                    
+                                                                              require('../../assets/history_black_24dp.svg').default
+
                                                                         }
                                                                         alt=''
                                                                   />{' '}
@@ -248,7 +254,7 @@ const Thumbnail = forwardRef((props, ref) => {
                               </div>
                         );
                   })}
-                   {(props.showLiveThumbnail === false )&&[...nonliveArr].map((list) => {
+                  {(props.showLiveThumbnail === false) && [...nonliveArr].map((list) => {
                         return (
                               <div
                                     className='col-md-3 mb-4'
@@ -260,12 +266,12 @@ const Thumbnail = forwardRef((props, ref) => {
                                                       <img
                                                             className='thumbnail'
                                                             src={
-                                                            list.photo_thumbnail
+                                                                  list.photo_thumbnail
                                                             }
                                                             alt=''
                                                       />
                                                       {source ===
-                                                      `${list.channelName}/${list.streamingName}` ? (
+                                                            `${list.channelName}/${list.streamingName}` ? (
                                                             <img
                                                                   className={`thumbnail_btn pause`}
                                                                   src={pauseBtn}
@@ -284,7 +290,7 @@ const Thumbnail = forwardRef((props, ref) => {
                                                                   alt=''
                                                                   onClick={() => {
                                                                         props.changeUrl(
-                                                                              `${list.channelName}/${list.streamingName}`,http
+                                                                              `${list.channelName}/${list.streamingName}`, http
                                                                         );
                                                                         setSource(
                                                                               `${list.channelName}/${list.streamingName}`,
@@ -300,7 +306,7 @@ const Thumbnail = forwardRef((props, ref) => {
                                           </div>
                                           <div className='text'>
                                                 <h4 className='thumb_heading mt-3'>
-                                                {list.channelName} :  {list.streamingName}
+                                                      {list.channelName} :  {list.streamingName}
                                                 </h4>
                                                 <div className='legend'>
                                                       <span className='time'>
@@ -312,7 +318,7 @@ const Thumbnail = forwardRef((props, ref) => {
                                                                               fill: 'grey',
                                                                         }}
                                                                         src={
-                                                                          require('../../assets/history_black_24dp.svg').default
+                                                                              require('../../assets/history_black_24dp.svg').default
                                                                         }
                                                                         alt=''
                                                                   />{' '}

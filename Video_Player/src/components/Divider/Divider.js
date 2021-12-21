@@ -14,7 +14,7 @@ function Divider(props) {
         </div>
         {recent && (
           <div className='rect_3' >
-            <p onClick={()=>props.getLiveNonLive(false)}>VIEW MORE</p>
+            <p onClick={()=>props.getLiveNonLive(false)}>videos</p>
           </div>
         )}
         <div className='rect_4' />

@@ -1,34 +1,33 @@
 import React,{useContext} from 'react';
 import './Header.css';
-import { Context } from "../../Context";
 import io from 'socket.io-client';
 import config from '../../config.json';
-const socket = io(config.Transcoding_Tool);
+// const socket = io(config.Transcoding_Tool);
 
 function Header(props) {
    const [count, setCount] = React.useState(0);
 
-  const getUniqueList = async (unSortedArray, key) => {
-    return [
-      ...new Map(unSortedArray.map((item) => [item[key], item])).values(),
-    ];
-  };
+//   const getUniqueList = async (unSortedArray, key) => {
+//     return [
+//       ...new Map(unSortedArray.map((item) => [item[key], item])).values(),
+//     ];
+//   };
 
 
 
   
 
-  React.useEffect(() => {
-    socket.off('playerLoaded').on('playerLoaded', (list) => {
+//   React.useEffect(() => {
+//     socket.off('playerLoaded').on('playerLoaded', (list) => {
      
       
-    });
-  }, []);
-;
+//     });
+//   }, []);
+// ;
 
-  socket.off('onStreamAdd').once('onStreamAdd', (newList) => {
+//   socket.off('onStreamAdd').once('onStreamAdd', (newList) => {
    
-  });
+//   });
   return (
     <div className='row banner'>
       <div className='bg-gradient' />

@@ -1,4 +1,4 @@
 {
-  "Transcoding_Tool": "http://127.0.0.1:8085",
-  "configJson":"http://localhost:8085/streamConfig"
+  "Transcoding_Tool": "13.127.170.126:8085",
+  "configJson":"http://13.127.170.126:8085/streamConfig"
 }
