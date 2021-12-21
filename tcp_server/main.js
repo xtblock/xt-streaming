@@ -1,69 +1,125 @@
+//modules Import
 const net = require('net');
-const config = require('./settings/tcpConfiguration.json')
-const Proxyserver = net.createServer();
-const connObj = [];
-const obsSockets = [];
-const clients = [];
+const MainServer = net.createServer();
+const SubServer = net.createServer();
+// connections
+let infoSockets = {}
+let obsSockets = [];
+let tcpSockets = [];
+let commSockets = [];
+let MainSocketsIp = [];
 
-Proxyserver.on('connection', (socket) => {
-      console.log('connected from ' + socket.remoteAddress );
-      obsSockets.push(socket);
-      for (const conn of connObj) {
-            const client = net.createConnection(
-                  { port: parseInt(conn.port), host: conn.host },
-                  () => {
-                        client.write(`address:${socket.remoteAddress}`);
-                        clients.push({
-                              name: socket.remoteAddress,
-                              socket: client,
-                        });
-                  },
-            );
+// connection emit when client is connected
+
+MainServer.on('connection', (socket) => {
+
+
+  console.log(socket.remoteAddress, 'connection');
+
+  if (MainSocketsIp.includes(socket.remoteAddress)) {
+    tcpSockets.push(socket);
+    console.log(tcpSockets.indexOf(socket), 'ffmpeg push');
+    infoSockets[socket.remoteAddress].push(socket)
+
+
+  } else {
+    obsSockets.push(socket);
+    console.log(socket.remoteAddress, 'obs push');
+    for (const sockets of commSockets) {
+      sockets.write(`start:${socket.remoteAddress}`);
+    }
+  }
+
+  // data writing from obs-studio to transcoding
+
+  socket.on('data', (data) => {
+    if (obsSockets.includes(socket)) {
+      let i = obsSockets.indexOf(socket)
+      for (const ip of MainSocketsIp) {
+        const Arrayfind = infoSockets[ip]
+        if (Arrayfind[i] !== undefined) {
+          Arrayfind[i].write(data)
+        }
       }
 
-      socket.on('data', (data) => {
-            for (const clientsocket of clients) {
-                  clientsocket.socket.write(data);
-            }
-      });
-      socket.on('close', () => {
-            console.log('client disconnected',socket.remoteAddress);
-            if (obsSockets.includes(socket)) {
-                  obsSockets.splice(obsSockets.indexOf(socket), 1);
-            }
-            for (const clientsocket of clients) {
-                  clientsocket.socket.end();
-                  const objs = clients.filter(
-                        (obj) => obj.name === socket.remoteAddress,
-                  );
-                  for (const obj of objs) {
-                        if (clients.includes(obj)) {
-                              clients.splice(clients.indexOf(obj), 1);
-                        }
-                  }
-            }
-      });
-});
-Proxyserver.listen(config.ports.Main, '0.0.0.0', () => {
-      console.log('server is running on port', config.ports.Main);
-});
+    }
+  });
 
-const server = net.createServer();
+  // emited when obs connection is closed
 
-server.on('connection', (socket) => {
-      console.log('new connection', socket.remoteAddress);
+  socket.once('close', () => {
+    if (obsSockets.includes(socket)) {
+      socketIndex = obsSockets.indexOf(socket);
+      obsSocketRemove(socketIndex);
+      tcpSocket(socketIndex);
+    }
+  });
 
-      socket.on('data', (data) => {
-            if (data.toString().includes(':')) {
-                  const info = {
-                        host: socket.remoteAddress,
-                        port: data.toString().split(':')[1],
-                  };
-                  connObj.push(info);
-            }
-      });
+  socket.once('end', () => {
+    if (tcpSockets.includes(socket)) {
+      const index = tcpSockets.indexOf(socket);
+      tcpSockets.splice(index, 1);
+
+      for (const ip of MainSocketsIp) {
+        const Arrayfind = infoSockets[ip]
+        const index1 = Arrayfind.indexOf(socket);
+        Arrayfind.splice(index1, 1)
+
+      }
+
+      console.log('disconnected from transcodingTool');
+      // process.exit(0);
+    }
+  });
 });
 
-server.listen(config.ports.MainCom, '0.0.0.0', () => {
-      console.log('server is running on port', config.ports.MainCom);
+// removing obs socket from server
+const obsSocketRemove = (socketIndex) => {
+  console.log(
+    obsSockets[socketIndex].remoteAddress,
+    'obs connection has been closed',
+  );
+  //  obsSockets[socketIndex].destroy();
+  if (obsSockets[socketIndex] !== undefined) {
+    obsSockets[socketIndex].destroy();
+    obsSockets.splice(socketIndex, 1);
+  }
+};
+
+// removing FFMPEG socket from server
+
+const tcpSocket = (socketIndex) => {
+
+  if (tcpSockets[socketIndex] !== undefined) {
+    console.log(
+      tcpSockets[socketIndex].remoteAddress,
+      'ffmpeg connection has been closed',
+    );
+
+    for (const ip of MainSocketsIp) {
+      const Arrayfind = infoSockets[ip]
+
+      Arrayfind[socketIndex].destroy()
+      Arrayfind.splice(socketIndex, 1);
+    }
+    tcpSockets.splice(socketIndex, 1);
+
+    console.log(infoSockets)
+  }
+};
+
+MainServer.listen(8000, '0.0.0.0', () => {
+  console.log(`TCP Server listening on port 8000`);
 });
+
+
+SubServer.on('connection', (socket) => {
+  console.log(socket.remoteAddress, 'connection');
+  commSockets.push(socket)
+  MainSocketsIp.push(socket.remoteAddress)
+  infoSockets[socket.remoteAddress] = [];
+
+})
+SubServer.listen(9000, '0.0.0.0', () => {
+  console.log(`Sub Server listening on port 9000`);
+})
