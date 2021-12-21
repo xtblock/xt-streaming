@@ -1,9 +1,7 @@
 const config = require('./settings/config.json');
 const spawn = require('child_process').spawn;
 const fs = require('fs-extra');
-const {
-      editStreamData,
-} = require('./jsonService');
+const { editStreamData } = require('./jsonService');
 const ffmpeg = async (id, channel) => {
       const input = config.tcp_Server_address;
       const output = `./media/${channel}/${id}`;
@@ -11,15 +9,7 @@ const ffmpeg = async (id, channel) => {
       await fs.ensureDir(output);
 
       const no_stream = config.quality.length;
-      const source = [
-            '-hide_banner',
-            '-loglevel',
-            'error',
-            '-re',
-            '-i',
-            `${input}`,
-            '-filter_complex',
-      ];
+      const source = ['-re', '-i', `${input}`, '-filter_complex'];
 
       let split = '[0:v]split=';
       split += no_stream;
@@ -111,6 +101,7 @@ const ffmpeg = async (id, channel) => {
       var proc = spawn(`ffmpeg`, args);
       proc.stdout.on('data', function (data, err) {
             console.log(err);
+            console.log(data);
       });
 
       proc.stderr.on('data', function (data) {
@@ -118,7 +109,7 @@ const ffmpeg = async (id, channel) => {
       });
 
       proc.on('close', function () {
-            console.log('finished live streaming' ,channel,'/',id);
+            console.log('finished live streaming', channel, '/', id);
             editStreamData('live', {
                   name: id,
                   channel: channel,

@@ -10,17 +10,17 @@ const filePath = config.ipfs.streamConfigPathIpfs;
 const getStreamData = async () => {
       const file = await ipfs.files.read(filePath);
       let data = file.toString();
-      await fs.writeFile('./streamConfig.json', data);
+      //await fs.writeFile('./streamConfig.json', data);
       return data
 };
 
 const createTime = async (data) => {
-      const oldJson = require('./streamConfig.json');
+      const oldJson = await getStreamData()
+      const newJson = JSON.parse(oldJson)
 
-      
       let streamsArr =
-            oldJson.data[
-                  oldJson.data.findIndex(
+      newJson.data[
+            newJson.data.findIndex(
                         (obj) => obj.channelName === data.channel,
                   )
             ].streams;
@@ -33,17 +33,18 @@ const createTime = async (data) => {
       streamObj.streamingName = data.name;
       streamObj.started_timeStamp = data.time;
       streamObj["live"] = data.live;
-      fs.writeJSON('./streamConfig.json', oldJson);
+      fs.writeJSON('./streamConfig.json', newJson);
       await ipfs.files.rm(filePath);
       await ipfs.files.write(filePath, './streamConfig.json', { create: true });
-      getStreamData();
+      
 };
 
 const live = async (data) => {
-      const oldJson = require('./streamConfig.json');
+      const oldJson = await getStreamData()
+      const newJson = JSON.parse(oldJson)
       let streamsArr =
-            oldJson.data[
-                  oldJson.data.findIndex(
+            newJson.data[
+                  newJson.data.findIndex(
                         (obj) => obj.channelName === data.channel,
                   )
             ].streams;
@@ -55,10 +56,10 @@ const live = async (data) => {
       console.log(data);
       streamObj.live = data.live;
       streamObj.ended_timeStamp = data.endedtime;
-      fs.writeJson('./streamConfig.json', oldJson);
+      fs.writeJson('./streamConfig.json', newJson);
       await ipfs.files.rm(filePath);
       await ipfs.files.write(filePath, './streamConfig.json', { create: true });
-      getStreamData();
+      
 };
 
 const editStreamData =  (action, data) => {

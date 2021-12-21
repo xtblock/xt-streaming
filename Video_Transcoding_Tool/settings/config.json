@@ -1,6 +1,6 @@
 {
       "broadcastingPort": 8085,
-      "tcp_Server_address": "tcp://localhost:8002",
+      "tcp_Server_address": "tcp://3.110.123.64:9070",
       "tcp_communication_port": 8003,
       "ipfs": {
             "host": "localhost",
