@@ -39,7 +39,7 @@ server.listen(port, () => {
 });
 
 let streamTotal = [];
-const mediaPath = path.join('/home/node/media');
+const mediaPath = path.join('./media');
 
 io.on('connection', async (socket) => {
       await getStreamData();
@@ -51,8 +51,8 @@ io.on('connection', async (socket) => {
 const tcpServerUrl = new URL(config.tcp_Server_address);
 var ffmpegConnection = net.createConnection(
       {
-            port: 9080,
-            host: '3.110.123.64',
+            port: config.tcp_communication_port,
+            host: tcpServerUrl.hostname,
       },
       () => {
             console.log('connected to TCP Server');
@@ -99,13 +99,9 @@ const socketEmit = (streamName, ChannelName) => {
                   const fileExists = await fs.pathExists(file);
                   const stats = await fs.stat(`${file}`);
 
+
                   // let streamCreated;
                   if (fileExists) {
-                        io.sockets.emit('onStreamAdd', {
-                              channelName: ChannelName,
-                              streamName: streamName,
-                        });
-                        clearInterval(intervalObj);
                         const data = {
                               channel: ChannelName,
                               name: streamName,
@@ -114,6 +110,13 @@ const socketEmit = (streamName, ChannelName) => {
                         };
                         console.log(data);
                         editStreamData('createTimeFrame', data);
+
+                        io.sockets.emit('onStreamAdd', {
+                              channelName: ChannelName,
+                              streamName: streamName,
+                        });
+                        clearInterval(intervalObj);
+                   
                   }
             } catch (e) {
                   console.log(e, 'error');

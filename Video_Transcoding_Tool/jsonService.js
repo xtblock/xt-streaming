@@ -1,22 +1,29 @@
 const fs = require('fs-extra');
-const IpfsPI = require('ipfs-api');
+const {create,globSource} = require('ipfs-http-client');
 const config = require('./settings/config.json');
-const ipfs = IpfsPI(config.ipfs.host, config.ipfs.port, {
-      protocol: config.ipfs.protocol,
-});
+const ipfs = create( `http://${config.ipfs.host}:${config.ipfs.port}`);
 const filePath = config.ipfs.streamConfigPathIpfs;
 
 
 const getStreamData = async () => {
-      const file = await ipfs.files.read(filePath);
-      let data = file.toString();
+  for await(const file of ipfs.files.read(filePath)){
+       const json = JSON.parse(file.toString());
+        fs.writeJSON('./streamVideoConfig.json', json);
+      return file.toString()
+};
+
+module.exports = {
+  editStreamData,
+  getStreamData,
+};
       //await fs.writeFile('./streamConfig.json', data);
-      return data
+      // return data
 };
 
 const createTime = async (data) => {
       const oldJson = await getStreamData()
-      const newJson = JSON.parse(oldJson)
+      console.log(oldJson);
+       const newJson = JSON.parse(oldJson)
 
       let streamsArr =
       newJson.data[
@@ -33,9 +40,9 @@ const createTime = async (data) => {
       streamObj.streamingName = data.name;
       streamObj.started_timeStamp = data.time;
       streamObj["live"] = data.live;
-      fs.writeJSON('./streamConfig.json', newJson);
-      await ipfs.files.rm(filePath);
-      await ipfs.files.write(filePath, './streamConfig.json', { create: true });
+     fs.writeJSON('./streamVideoConfig.json', newJson);
+       await ipfs.files.rm(filePath);
+     await ipfs.files.write(filePath, 'sdffsfdsfsdf', { create: true });
       
 };
 
@@ -56,9 +63,9 @@ const live = async (data) => {
       console.log(data);
       streamObj.live = data.live;
       streamObj.ended_timeStamp = data.endedtime;
-      fs.writeJson('./streamConfig.json', newJson);
+      fs.writeJson('./streamVideoConfig.json', newJson);
       await ipfs.files.rm(filePath);
-      await ipfs.files.write(filePath, './streamConfig.json', { create: true });
+     await ipfs.files.write(filePath, `${require('./streamConfig.json')}`, { create: true });
       
 };
 

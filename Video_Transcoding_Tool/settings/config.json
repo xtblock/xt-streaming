@@ -1,12 +1,12 @@
 {
       "broadcastingPort": 8085,
       "tcp_Server_address": "tcp://3.110.123.64:9070",
-      "tcp_communication_port": 8003,
+      "tcp_communication_port": 9080,
       "ipfs": {
-            "host": "localhost",
+            "host": "3.110.188.150",
             "port": 5001,
             "protocol": "http",
-            "streamConfigPathIpfs": "/streamConfig.json"
+            "streamConfigPathIpfs": "/streamVideoConfig.json"
       },
       "quality": [
             {

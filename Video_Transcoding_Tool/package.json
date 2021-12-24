@@ -12,16 +12,10 @@
   "dependencies": {
     "axios": "^0.24.0",
     "cors": "^2.8.5",
-    "curl": "^0.1.4",
     "express": "^4.17.1",
     "fs-extra": "^10.0.0",
-    "install": "^0.13.0",
     "ipfs": "^0.60.2",
-    "ipfs-api": "^26.1.2",
     "ipfs-http-client": "^54.0.2",
-    "js-ipfs": "^0.0.301",
-    "lodash": "^4.17.21",
-    "node-fetch": "^2.6.6",
     "nodemon": "^2.0.15",
     "npm": "^8.3.0",
     "socket.io": "^4.3.1"
