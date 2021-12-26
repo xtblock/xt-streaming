@@ -12,11 +12,7 @@ const getStreamData = async () => {
       return file.toString()
 };
 
-module.exports = {
-  editStreamData,
-  getStreamData,
-};
-      //await fs.writeFile('./streamConfig.json', data);
+ //await fs.writeFile('./streamConfig.json', data);
       // return data
 };
 
@@ -42,7 +38,7 @@ const createTime = async (data) => {
       streamObj["live"] = data.live;
      fs.writeJSON('./streamVideoConfig.json', newJson);
        await ipfs.files.rm(filePath);
-     await ipfs.files.write(filePath, 'sdffsfdsfsdf', { create: true });
+     await ipfs.files.write(filePath, Buffer.from(JSON.stringify(newJson)), { create: true });
       
 };
 
@@ -65,7 +61,7 @@ const live = async (data) => {
       streamObj.ended_timeStamp = data.endedtime;
       fs.writeJson('./streamVideoConfig.json', newJson);
       await ipfs.files.rm(filePath);
-     await ipfs.files.write(filePath, `${require('./streamConfig.json')}`, { create: true });
+     await ipfs.files.write(filePath, Buffer.from(JSON.stringify(newJson)), { create: true });
       
 };
 

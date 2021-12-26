@@ -28,8 +28,7 @@ app.get('/streamConfig', async (req, res) => {
 app.get('/media/:channel/:stream/:quality', (req, res) => {
       res.sendFile(
             path.join(
-                  __dirname,
-                  `./media/${req.params.channel}/${req.params.stream}/${req.params.quality}`,
+                  `/home/node/media/${req.params.channel}/${req.params.stream}/${req.params.quality}`,
             ),
       );
       // res.sendFile(`/home/user/Desktop/storage/${req.params.stream}/${req.params.quality}`);
@@ -59,7 +58,7 @@ var ffmpegConnection = net.createConnection(
             // ffmpegConnection.write(`${networkInfo}:${tcpServerUrl.port}`);
             ffmpegConnection.once('end', function () {
                   console.log('disconnected from TCP Server');
-                  process.exit(0);
+                  // process.exit(0);
             });
       },
 );
@@ -93,7 +92,7 @@ ffmpegConnection.on('data', async (data) => {
 });
 const socketEmit = (streamName, ChannelName) => {
       const intervalObj = setInterval(async () => {
-            const file = `./media/${ChannelName}/${streamName}/master.m3u8`;
+            const file = `/home/node/media/${ChannelName}/${streamName}/master.m3u8`;
             // const file = `/home/user/Desktop/storage/${streamName}/master.m3u8`;
             try {
                   const fileExists = await fs.pathExists(file);

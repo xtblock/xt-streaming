@@ -8,9 +8,7 @@ import React, {
 import moment from 'moment';
 import * as getService from '../../httpService';
 
-import io from 'socket.io-client';
 import './Thumbnail.css';
-
 
 const playBtn = require('../../assets/Mediamodifier-Design-2.svg').default;
 const pauseBtn = require('../../assets/pause-circle.svg').default;
@@ -45,12 +43,9 @@ const Thumbnail = forwardRef((props, ref) => {
 
       //       console.log(sortedArray, 'sorted');
       // };
-      
-      const socket = io('13.127.170.126:8085', {
-            cors: {
-                  orgin: '*'
-            }
-      });
+
+      const socket = props.socket;
+
       const [liveArr, setLiveArr] = React.useState([]);
       const [nonliveArr, setNonLiveArr] = React.useState([]);
       const [http, sethttp] = React.useState('');
@@ -58,59 +53,53 @@ const Thumbnail = forwardRef((props, ref) => {
       console.log(props.showLiveThumbnail, 'showLive');
 
       const live = async () => {
+            const json = await getService.getJson();
+            const parsedJson = JSON.parse(json);
 
-
-            const json = await getService.getJson()
-            const parsedJson = JSON.parse(json)
-
-            let liveVideos = []
+            let liveVideos = [];
             for (const live of parsedJson.data) {
-                  const channelName = live.channelName
-                  const lives = live.streams.find(obj => obj.live === true)
+                  const channelName = live.channelName;
+                  const lives = live.streams.find((obj) => obj.live === true);
                   if (lives !== undefined) {
-                        lives["channelName"] = channelName
-                        liveVideos.push(lives)
+                        lives['channelName'] = channelName;
+                        liveVideos.push(lives);
                   }
-
             }
-
 
             let uniq = [...new Set(liveVideos)];
-            setLiveArr(uniq)
+            setLiveArr(uniq);
 
-            console.log(uniq, "checking live streams")
-
+            console.log(uniq, 'checking live streams');
       };
       const nonlive = async () => {
-            console.log('nolive')
-            const json = await getService.getJson()
-            const parsedJson = JSON.parse(json)
+            console.log('nolive');
+            const json = await getService.getJson();
+            const parsedJson = JSON.parse(json);
 
-            let nonLiveVideos = []
+            let nonLiveVideos = [];
             for (const live of parsedJson.data) {
-                  const channelName = live.channelName
-                  const nonLives = live.streams.find(obj => obj.live === false)
+                  const channelName = live.channelName;
+                  const nonLives = live.streams.find(
+                        (obj) => obj.live === false,
+                  );
                   if (nonLives !== undefined) {
-                        nonLives["channelName"] = channelName
-                        nonLiveVideos.push(nonLives)
+                        nonLives['channelName'] = channelName;
+                        nonLiveVideos.push(nonLives);
                   }
-
             }
 
-
             let uniq = [...new Set(nonLiveVideos)];
-            setNonLiveArr(uniq)
+            setNonLiveArr(uniq);
 
-            console.log(uniq, "checking live streams")
-
+            console.log(uniq, 'checking live streams');
       };
       useEffect(() => {
-            socket.off('playerLoaded').on('playerLoaded', (list) => {
+            socket.on('playerLoaded', (list) => {
                   live();
                   nonlive();
             });
       }, []);
-      socket.off('onStreamAdd').once('onStreamAdd', (newList) => {
+      socket.on('onStreamAdd', (newList) => {
             live();
             console.log(newList, 'newStreamList');
       });
@@ -145,7 +134,6 @@ const Thumbnail = forwardRef((props, ref) => {
 
       console.log(props.showLiveThumbnail, 'showLive');
 
-
       const getImage = () => {
             if (counter > 3) {
                   counter = +1;
@@ -169,170 +157,180 @@ const Thumbnail = forwardRef((props, ref) => {
 
       return (
             <div className='row'>
-
-
-
-
-                  {(props.showLiveThumbnail === true) && [...liveArr].map((list) => {
-                        return (
-                              <div
-                                    className='col-md-3 mb-4'
-                                    key={list.streamingName}
-                              >
-                                    <div className='stream'>
-                                          <div className='thumb'>
-                                                <div className='thumbnail_img'>
-                                                      <img
-                                                            className='thumbnail'
-                                                            src={
-                                                                  list.photo_thumbnail
-
-                                                            }
-                                                            alt=''
-                                                      />
-                                                      {source ===
-                                                            `${list.channelName}/${list.streamingName}` ? (
+                  {props.showLiveThumbnail === true &&
+                        [...liveArr].map((list) => {
+                              return (
+                                    <div
+                                          className='col-md-3 mb-4'
+                                          key={list.streamingName}
+                                    >
+                                          <div className='stream'>
+                                                <div className='thumb'>
+                                                      <div className='thumbnail_img'>
                                                             <img
-                                                                  className={`thumbnail_btn pause`}
-                                                                  src={pauseBtn}
+                                                                  className='thumbnail'
+                                                                  src={
+                                                                        list.photo_thumbnail
+                                                                  }
                                                                   alt=''
-                                                                  onClick={() => {
-                                                                        thumb_button();
-                                                                        setSource(
-                                                                              '',
-                                                                        );
-                                                                  }}
                                                             />
-                                                      ) : (
-                                                            <img
-                                                                  className={`thumbnail_btn play`}
-                                                                  src={playBtn}
-                                                                  alt=''
-                                                                  onClick={() => {
-                                                                        props.changeUrl(
-                                                                              `${list.channelName}/${list.streamingName}`, http
-                                                                        );
-                                                                        setSource(
-                                                                              `${list.channelName}/${list.streamingName}`,
-                                                                        );
-                                                                        setCurrent(
-                                                                              `${list.channelName}/${list.streamingName}`,
-                                                                        );
-                                                                        thumb_button();
-                                                                  }}
-                                                            />
-                                                      )}
-                                                </div>
-                                          </div>
-                                          <div className='text'>
-                                                <h4 className='thumb_heading mt-3'>
-                                                      {list.channelName} :  {list.streamingName}
-                                                </h4>
-                                                <div className='legend'>
-                                                      <span className='time'>
-                                                            <span>
+                                                            {source ===
+                                                                  `${list.channelName}/${list.streamingName}` ? (
                                                                   <img
-                                                                        height='12px'
-                                                                        width='12px'
-                                                                        style={{
-                                                                              fill: 'grey',
-                                                                        }}
+                                                                        className={`thumbnail_btn pause`}
                                                                         src={
-                                                                              require('../../assets/history_black_24dp.svg').default
-
+                                                                              pauseBtn
                                                                         }
                                                                         alt=''
-                                                                  />{' '}
-                                                                  {streamTime(
-                                                                        list.started_timeStamp,
-                                                                  )}
+                                                                        onClick={() => {
+                                                                              thumb_button();
+                                                                              setSource(
+                                                                                    '',
+                                                                              );
+                                                                        }}
+                                                                  />
+                                                            ) : (
+                                                                  <img
+                                                                        className={`thumbnail_btn play`}
+                                                                        src={
+                                                                              playBtn
+                                                                        }
+                                                                        alt=''
+                                                                        onClick={() => {
+                                                                              props.changeUrl(
+                                                                                    `${list.channelName}/${list.streamingName}`,
+                                                                                    http,
+                                                                              );
+                                                                              setSource(
+                                                                                    `${list.channelName}/${list.streamingName}`,
+                                                                              );
+                                                                              setCurrent(
+                                                                                    `${list.channelName}/${list.streamingName}`,
+                                                                              );
+                                                                              thumb_button();
+                                                                        }}
+                                                                  />
+                                                            )}
+                                                      </div>
+                                                </div>
+                                                <div className='text'>
+                                                      <h4 className='thumb_heading mt-3'>
+                                                            {list.channelName} :{' '}
+                                                            {list.streamingName}
+                                                      </h4>
+                                                      <div className='legend'>
+                                                            <span className='time'>
+                                                                  <span>
+                                                                        <img
+                                                                              height='12px'
+                                                                              width='12px'
+                                                                              style={{
+                                                                                    fill: 'grey',
+                                                                              }}
+                                                                              src={
+                                                                                    require('../../assets/history_black_24dp.svg')
+                                                                                          .default
+                                                                              }
+                                                                              alt=''
+                                                                        />{' '}
+                                                                        {streamTime(
+                                                                              list.started_timeStamp,
+                                                                        )}
+                                                                  </span>
                                                             </span>
-                                                      </span>
+                                                      </div>
                                                 </div>
                                           </div>
                                     </div>
-                              </div>
-                        );
-                  })}
-                  {(props.showLiveThumbnail === false) && [...nonliveArr].map((list) => {
-                        return (
-                              <div
-                                    className='col-md-3 mb-4'
-                                    key={list.streamingName}
-                              >
-                                    <div className='stream'>
-                                          <div className='thumb'>
-                                                <div className='thumbnail_img'>
-                                                      <img
-                                                            className='thumbnail'
-                                                            src={
-                                                                  list.photo_thumbnail
-                                                            }
-                                                            alt=''
-                                                      />
-                                                      {source ===
-                                                            `${list.channelName}/${list.streamingName}` ? (
+                              );
+                        })}
+                  {props.showLiveThumbnail === false &&
+                        [...nonliveArr].map((list) => {
+                              return (
+                                    <div
+                                          className='col-md-3 mb-4'
+                                          key={list.streamingName}
+                                    >
+                                          <div className='stream'>
+                                                <div className='thumb'>
+                                                      <div className='thumbnail_img'>
                                                             <img
-                                                                  className={`thumbnail_btn pause`}
-                                                                  src={pauseBtn}
+                                                                  className='thumbnail'
+                                                                  src={
+                                                                        list.photo_thumbnail
+                                                                  }
                                                                   alt=''
-                                                                  onClick={() => {
-                                                                        thumb_button();
-                                                                        setSource(
-                                                                              '',
-                                                                        );
-                                                                  }}
                                                             />
-                                                      ) : (
-                                                            <img
-                                                                  className={`thumbnail_btn play`}
-                                                                  src={playBtn}
-                                                                  alt=''
-                                                                  onClick={() => {
-                                                                        props.changeUrl(
-                                                                              `${list.channelName}/${list.streamingName}`, http
-                                                                        );
-                                                                        setSource(
-                                                                              `${list.channelName}/${list.streamingName}`,
-                                                                        );
-                                                                        setCurrent(
-                                                                              `${list.channelName}/${list.streamingName}`,
-                                                                        );
-                                                                        thumb_button();
-                                                                  }}
-                                                            />
-                                                      )}
-                                                </div>
-                                          </div>
-                                          <div className='text'>
-                                                <h4 className='thumb_heading mt-3'>
-                                                      {list.channelName} :  {list.streamingName}
-                                                </h4>
-                                                <div className='legend'>
-                                                      <span className='time'>
-                                                            <span>
+                                                            {source ===
+                                                                  `${list.channelName}/${list.streamingName}` ? (
                                                                   <img
-                                                                        height='12px'
-                                                                        width='12px'
-                                                                        style={{
-                                                                              fill: 'grey',
-                                                                        }}
+                                                                        className={`thumbnail_btn pause`}
                                                                         src={
-                                                                              require('../../assets/history_black_24dp.svg').default
+                                                                              pauseBtn
                                                                         }
                                                                         alt=''
-                                                                  />{' '}
-                                                                  {streamTime(
-                                                                        list.started_timeStamp,
-                                                                  )}
+                                                                        onClick={() => {
+                                                                              thumb_button();
+                                                                              setSource(
+                                                                                    '',
+                                                                              );
+                                                                        }}
+                                                                  />
+                                                            ) : (
+                                                                  <img
+                                                                        className={`thumbnail_btn play`}
+                                                                        src={
+                                                                              playBtn
+                                                                        }
+                                                                        alt=''
+                                                                        onClick={() => {
+                                                                              props.changeUrl(
+                                                                                    `${list.channelName}/${list.streamingName}`,
+                                                                                    http,
+                                                                              );
+                                                                              setSource(
+                                                                                    `${list.channelName}/${list.streamingName}`,
+                                                                              );
+                                                                              setCurrent(
+                                                                                    `${list.channelName}/${list.streamingName}`,
+                                                                              );
+                                                                              thumb_button();
+                                                                        }}
+                                                                  />
+                                                            )}
+                                                      </div>
+                                                </div>
+                                                <div className='text'>
+                                                      <h4 className='thumb_heading mt-3'>
+                                                            {list.channelName} :{' '}
+                                                            {list.streamingName}
+                                                      </h4>
+                                                      <div className='legend'>
+                                                            <span className='time'>
+                                                                  <span>
+                                                                        <img
+                                                                              height='12px'
+                                                                              width='12px'
+                                                                              style={{
+                                                                                    fill: 'grey',
+                                                                              }}
+                                                                              src={
+                                                                                    require('../../assets/history_black_24dp.svg')
+                                                                                          .default
+                                                                              }
+                                                                              alt=''
+                                                                        />{' '}
+                                                                        {streamTime(
+                                                                              list.started_timeStamp,
+                                                                        )}
+                                                                  </span>
                                                             </span>
-                                                      </span>
+                                                      </div>
                                                 </div>
                                           </div>
                                     </div>
-                              </div>
-                        );
-                  })}
+                              );
+                        })}
             </div>
       );
 });

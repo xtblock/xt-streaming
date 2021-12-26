@@ -56,22 +56,22 @@ MainServer.on('connection', (socket) => {
     }
   });
 
-  socket.once('end', () => {
-    if (tcpSockets.includes(socket)) {
-      const index = tcpSockets.indexOf(socket);
-      tcpSockets.splice(index, 1);
+  // socket.once('end', () => {
+  //   if (tcpSockets.includes(socket)) {
+  //     const index = tcpSockets.indexOf(socket);
+  //     tcpSockets.splice(index, 1);
 
-      for (const ip of MainSocketsIp) {
-        const Arrayfind = infoSockets[ip]
-        const index1 = Arrayfind.indexOf(socket);
-        Arrayfind.splice(index1, 1)
+  //     for (const ip of MainSocketsIp) {
+  //       const Arrayfind = infoSockets[ip]
+  //       const index1 = Arrayfind.indexOf(socket);
+  //       Arrayfind.splice(index1, 1)
 
-      }
+  //     }
 
-      console.log('disconnected from transcodingTool');
-      // process.exit(0);
-    }
-  });
+  //     console.log('disconnected from transcodingTool');
+  //     // process.exit(0);
+  //   }
+  // });
 });
 
 // removing obs socket from server
@@ -110,7 +110,7 @@ const tcpSocket = (socketIndex) => {
 };
 
 MainServer.listen(config.mainServerPort, '0.0.0.0', () => {
-  console.log(`TCP Server listening on port 8000`);
+  console.log(`TCP Server listening on port`,config.mainServerPort);
 });
 
 
@@ -122,5 +122,5 @@ SubServer.on('connection', (socket) => {
 
 })
 SubServer.listen(config.mainCommPort, '0.0.0.0', () => {
-  console.log(`Sub Server listening on port 9000`);
+  console.log(`Sub Server listening on port`,config.mainCommPort);
 })

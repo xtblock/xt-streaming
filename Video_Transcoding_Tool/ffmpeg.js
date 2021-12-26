@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const { editStreamData } = require('./jsonService');
 const ffmpeg = async (id, channel) => {
       const input = config.tcp_Server_address;
-      const output = `./media/${channel}/${id}`;
+      const output = `/home/node/media/${channel}/${id}`;
       console.log(id, channel, 'id,channel in ffmpeg');
       await fs.ensureDir(output);
 

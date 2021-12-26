@@ -8,7 +8,8 @@ import Videoplayer from './components/VideoPlayer/Videoplayer';
 import Footer from './components/Footer/Footer';
 import Thumbnail from './components/Thumbnail/Thumbnail';
 import { Context } from "./Context.js";
-import { getData, getJson } from './httpService';
+import io from 'socket.io-client';
+import * as getService from './httpService';
 // import config from './config.json';
 function App() {
 
@@ -26,10 +27,16 @@ function App() {
   const [host,setHost] = React.useState('');
   // const [count,setCount] = React.useState(0);
 
-useEffect(async()=>{
-const file = await getData()
-console.log(file)
-setHost(file)
+useEffect(()=>{
+
+  const fetch= async()=>{
+
+    const file = await getService.getData()
+    console.log(file)
+    setHost(file)
+  }
+  fetch()
+
 })
 
 
@@ -50,7 +57,11 @@ setHost(file)
       },
     ],
   };
-
+  const socket = io(`http://${host}`, {
+    cors: {
+          orgin: '*'
+    }
+});
 
   const handlePlayerReady = (player) => {
     playerRef.current = player;
@@ -102,6 +113,7 @@ const changeThumbnails=(val)=>{
         />
         <Divider recent={true} title='RECENT VIDEOS'  getLiveNonLive ={setshowLive}/>
         <Thumbnail
+          socket = {socket}
           ref={thumbRef}
           showLiveThumbnail={showLive}
           playerUrl={urlId}
