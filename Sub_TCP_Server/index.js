@@ -8,7 +8,7 @@ console.log(url.port)
 
 const mainConnection = net.connect(
       {
-            port: url.port,
+            port: config.mainCommunicationServerPort,
             host: url.hostname,
       },
       () => {
@@ -32,8 +32,8 @@ mainConnection.on('data', (data) => {
 
 const createConnection = () => {
       const client1 = net.connect({
-            port: config.mainTcpServerPort,
-            host: config.mainTcpServerUrl,
+        port: url.port,
+        host: url.hostname,
       });
       const client2 = net.connect({
             port: config.internalCommunicationPort,
