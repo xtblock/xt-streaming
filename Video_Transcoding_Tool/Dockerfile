@@ -4,7 +4,7 @@ FROM  node:16.13.1-alpine
 RUN apk add  --no-cache ffmpeg
 RUN apk update && apk add bash
 RUN apk add git
-
+RUN apk add curl
 # set node user to un the application
 RUN mkdir -p /home/node/app/node_modules \
     && mkdir -p /home/node/settings \
