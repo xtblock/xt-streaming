@@ -25,6 +25,7 @@ function App() {
   const [urlId, setUrlId] = React.useState('');
   const [showLive, setshowLive] = React.useState(true);
   const [host,setHost] = React.useState('');
+  const [sockUrl,setSockUrl] = React.useState('');
   // const [count,setCount] = React.useState(0);
 
 useEffect(()=>{
@@ -34,6 +35,7 @@ useEffect(()=>{
     const file = await getService.getData()
     console.log(file)
     setHost(file)
+     setSockUrl(`http://${file}`)
   }
   fetch()
 
@@ -57,7 +59,8 @@ useEffect(()=>{
       },
     ],
   };
-  const socket = io(`http://${host}`, {
+
+  const socket = io(sockUrl, {
     cors: {
           orgin: '*'
     }
@@ -102,7 +105,7 @@ const changeThumbnails=(val)=>{
     <div className='App'>
       <div className='container'>
      
-        <Header  />
+        <Header socket = {socket} />
         <Tuned />
         <Divider title='NOW STREAMING' />
 

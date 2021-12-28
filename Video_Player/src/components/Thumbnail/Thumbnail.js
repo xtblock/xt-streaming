@@ -50,11 +50,9 @@ const Thumbnail = forwardRef((props, ref) => {
       const [nonliveArr, setNonLiveArr] = React.useState([]);
       const [http, sethttp] = React.useState('');
 
-      console.log(props.showLiveThumbnail, 'showLive');
-
       const live = async () => {
             const json = await getService.getJson();
-            const parsedJson = JSON.parse(json);
+            const parsedJson =json;
 
             let liveVideos = [];
             for (const live of parsedJson.data) {
@@ -74,7 +72,7 @@ const Thumbnail = forwardRef((props, ref) => {
       const nonlive = async () => {
             console.log('nolive');
             const json = await getService.getJson();
-            const parsedJson = JSON.parse(json);
+            const parsedJson = json
 
             let nonLiveVideos = [];
             for (const live of parsedJson.data) {
@@ -93,16 +91,19 @@ const Thumbnail = forwardRef((props, ref) => {
 
             console.log(uniq, 'checking live streams');
       };
-      useEffect(() => {
-            socket.on('playerLoaded', (list) => {
-                  live();
-                  nonlive();
-            });
-      }, []);
-      socket.on('onStreamAdd', (newList) => {
+        
+      socket.on('playerLoaded',(list)=>{
+            console.log(list,'playerLoaded');
             live();
+            nonlive();
+      })  
+
+
+          socket.off('onStreamAdd').once('onStreamAdd', (newList) => {
             console.log(newList, 'newStreamList');
-      });
+            live();
+          });
+
 
       const [thumbnail_player_btn, setThumbnail_player_btn] =
             React.useState(playBtn);
