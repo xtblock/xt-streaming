@@ -1,9 +1,9 @@
 import axios from "axios";
-
+import config from './config.json'
 
 const getData = async ()=> {
     try {
-      const response = await axios.get('https://ipfs.io/ipfs/Qma5EXuQmFw1cGBaB69veMSQdatfnK5d6VD9Mrj3zMpqSX?filename=config.json');
+      const response = await axios.get(config.Transcoding_Tool_URL);
       console.log(response)
       return response.data.transcoding_tool
 

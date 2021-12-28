@@ -1,4 +1,3 @@
 {
-  "Transcoding_Tool": "13.127.170.126:8085",
-  "configJson":"http://13.127.170.126:8085/streamConfig"
+  "Transcoding_Tool_URL": "https://ipfs.io/ipfs/Qma5EXuQmFw1cGBaB69veMSQdatfnK5d6VD9Mrj3zMpqSX?filename=config.json"
 }
