@@ -2,11 +2,14 @@ const net = require('net');
 const events = require('events');
 const Emmiter = new events.EventEmitter();
 const config = require('./config.json');
+const url = new URL(config.mainTcpServerUrl);
+console.log(url.hostname)
+console.log(url.port)
 
 const mainConnection = net.connect(
       {
-            port: config.mainCommunicationServerPort,
-            host: config.mainTcpServerUrl,
+            port: url.port,
+            host: url.hostname,
       },
       () => {
             console.log('connected to TCP Server');
