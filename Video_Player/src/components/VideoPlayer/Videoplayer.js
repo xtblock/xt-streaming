@@ -4,7 +4,7 @@ import './Videoplayer.css';
 import 'video.js/dist/video-js.css';
 import qualitySelector from 'videojs-hls-quality-selector';
 import qualityLevels from 'videojs-contrib-quality-levels';
-const Videoplayer = React.memo((props) => {
+const Videoplayer =(props) => {
   const videoRef = React.useRef(null);
   const playerRef = React.useRef(null);
   const { options, onReady, toggle } = props;
@@ -56,8 +56,6 @@ const Videoplayer = React.memo((props) => {
       />
     </div>
   );
-},(prevProps, nextProps) => {
-  return (prevProps.options === nextProps.options);
-});
+};
 
 export default Videoplayer;

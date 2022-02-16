@@ -1,4 +1,4 @@
-FROM  node:14.15.1-alpine
+FROM  node:16.13.1-alpine
 
 # set node user to un the application
 RUN mkdir -p /home/node/app/node_modules \
@@ -26,6 +26,6 @@ RUN npm install
 # Bundle app source
 COPY --chown=node:node . .
 
-EXPOSE 8000
-CMD [ "node", "sub.js" ]
+EXPOSE 8000 9000 9070 9080
+CMD [ "node", "index.js" ]
 # CMD ["pm2-runtime", "index.js"]

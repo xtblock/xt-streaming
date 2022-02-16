@@ -1,0 +1,35 @@
+
+    {
+        
+        "data" : [
+            {
+            "channelName": "TestChannelOne",
+            "streamKey": "192.168.1.10",
+            "streams":[
+                {
+                    "streamingName": "VideoStream1",
+                    "photo_thumbnail":"https://images.pexels.com/photos/459762/pexels-photo-459762.jpeg?cs=srgb&dl=pexels-pixabay-459762.jpg&fm=jpg",
+                    "video_thumbnail": "/video uri/",
+                    "started_timeStamp": "",
+                    "ended_timeStamp": ""
+                }
+            ]
+            },
+            {
+                "channelName": "TestChannelTwo",
+                "streamKey": "192.168.1.4",
+                "streams":[
+                    {
+                        "streamingName": "VideoStream2",
+                        "photo_thumbnail": "https://images.pexels.com/photos/1111597/pexels-photo-1111597.jpeg?cs=srgb&dl=pexels-lilartsy-1111597.jpg&fm=jpg",
+                        "video_thumbnail": "/video uri/",
+                        "started_timeStamp": "",
+                        "ended_timeStamp": ""
+                    }
+                   
+                ]
+                }
+        ]
+        
+        
+    }
