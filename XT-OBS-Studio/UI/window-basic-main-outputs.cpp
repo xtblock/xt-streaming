@@ -5,6 +5,7 @@
 #include "audio-encoders.hpp"
 #include "window-basic-main.hpp"
 #include "window-basic-main-outputs.hpp"
+#include <curl/curl.h>
 
 using namespace std;
 
@@ -1695,8 +1696,46 @@ bool AdvancedOutput::SetupStreaming(obs_service_t *service)
 	Auth *auth = main->GetAuth();
 	if (auth)
 		auth->OnStreamConfig();
+			/* --------------------- */
+const char *id = obs_service_get_id(service);
+if(strcmp(id, "xtstream_custom") == 0 ){
+	const char *	path = obs_service_get_url(service);
+	const char *	key =obs_service_get_key(service);
+ 	
+	 
+	 std::string s = path;
+std::string delimiter = ":";
 
-	/* --------------------- */
+size_t pos = 0;
+std::string token;
+while ((pos = s.find(delimiter)) != std::string::npos) {
+    token = s.substr(0, pos);
+    s.erase(0, pos + delimiter.length());
+}
+printf("token: %s \n", token.c_str());
+printf("key: %s \n", key);
+printf("url: %s \n", ("http:"+std::string(token)+":8080/"+"query?"+std::string(key)+"/").c_str());
+	 CURL *curl;
+  	
+	CURLcode res;
+ 
+  curl = curl_easy_init();
+  if(curl) {
+    curl_easy_setopt(curl, CURLOPT_URL,("http:"+std::string(token)+":5555/"+"query?"+std::string(key)).c_str());
+    /* example.com is redirected, so we tell libcurl to follow redirection */
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+ 
+    /* Perform the request, res will get the return code */
+    res = curl_easy_perform(curl);
+    /* Check for errors */
+    if(res != CURLE_OK)
+      fprintf(stderr, "curl_easy_perform() failed: %s\n",
+              curl_easy_strerror(res));
+    /* always cleanup */
+    curl_easy_cleanup(curl);
+
+  }
+}
 
 	const char *type = obs_service_get_output_type(service);
 	if (!type) {
@@ -1710,6 +1749,7 @@ bool AdvancedOutput::SetupStreaming(obs_service_t *service)
 			type = "ffmpeg_mpegts_muxer";
 		}
 	}
+
 
 	/* XXX: this is messy and disgusting and should be refactored */
 	if (outputType != type) {

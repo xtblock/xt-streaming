@@ -17,6 +17,7 @@
 #include "ffmpeg-mux/ffmpeg-mux.h"
 #include "obs-ffmpeg-mux.h"
 
+
 #ifdef _WIN32
 #include "util/windows/win-version.h"
 #endif
@@ -305,9 +306,12 @@ static void set_file_not_readable_error(struct ffmpeg_muxer *stream,
 
 static bool ffmpeg_mux_start(void *data)
 {
+	
+
 	struct ffmpeg_muxer *stream = data;
 	obs_data_t *settings;
 	const char *path;
+	const char *key;
 
 	if (!obs_output_can_begin_data_capture(stream->output, 0))
 		return false;
@@ -315,6 +319,14 @@ static bool ffmpeg_mux_start(void *data)
 		return false;
 
 	settings = obs_output_get_settings(stream->output);
+/* 	obs_service_t *service;
+	service = obs_output_get_service(stream->output);
+const char *id = obs_service_get_id(service);
+	if(strcmp(id, "xtstream_custom") == 0 ){
+		path = obs_service_get_url(service);
+		key =obs_service_get_key(service);
+		printf("%s %s ",path,key);
+	} */
 	if (stream->is_network) {
 		obs_service_t *service;
 		service = obs_output_get_service(stream->output);

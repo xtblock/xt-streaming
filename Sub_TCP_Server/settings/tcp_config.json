@@ -1,0 +1,10 @@
+{
+    "tcp_name": "172.17.0.3",
+    "tcp_server_key":"93zY1QiMjaS8ejNZ3ve0L+P2jbiPcA+fCCFM5k9mYTI=",
+    "port": 9000,
+    "main_server": "tcp://172.17.0.2:8000",
+    "ipfs": {
+        "address": "http://192.168.1.3:5001",
+        "stream_key_cid": "QmWG1HCxx3nKYSNghG3576MmxJvG8MaAUP23dwPhkLaqE4"
+    }
+}

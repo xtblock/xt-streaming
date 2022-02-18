@@ -1,9 +1,0 @@
-{
-      "main_tcp": "127.0.0.1",
-      "ports": {
-            "Main": 8000,
-            "MainCom": 8001,
-            "SubTcpMain": 8002,
-            "SubTcpCom": 8003
-      }
-}

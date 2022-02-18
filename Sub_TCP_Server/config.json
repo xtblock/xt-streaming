@@ -1,6 +1,0 @@
-{
-"mainTcpServerUrl":"tcp://3.110.188.150:8000",
-"mainCommunicationServerPort":9000,
-"internalCommunicationPort":9070,
-"subCommunicationServerPort":9080
-}

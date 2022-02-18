@@ -7,12 +7,10 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_popup":"./popup.html"
+    "default_popup": "./popup.html"
   },
-  "permissions":[
-    "scripting"
-  ],
-  "options_page":"./index.html",
+  "permissions": ["scripting"],
+  "options_page": "./index.html",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   }

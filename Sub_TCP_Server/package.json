@@ -1,11 +1,15 @@
 {
-  "name": "sub_tcp_server",
+  "name": "sub",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "docker build -t sub . && docker run -dp 9000:9000  --name sub sub"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^10.0.0",
+    "ipfs-http-client": "^56.0.1"
+  }
 }

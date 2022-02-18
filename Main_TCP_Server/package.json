@@ -1,11 +1,14 @@
 {
-  "name": "main_tcp_server",
+  "name": "main",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "docker build -t main . && docker run -dp 8000:8000 -dp 5555:5555 --name main main"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
 }
