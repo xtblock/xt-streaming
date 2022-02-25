@@ -4,7 +4,7 @@ import './Videoplayer.css';
 import 'video.js/dist/video-js.css';
 import qualitySelector from 'videojs-hls-quality-selector';
 import qualityLevels from 'videojs-contrib-quality-levels';
-const Videoplayer =(props) => {
+const Videoplayer = (props) => {
   const videoRef = React.useRef(null);
   const playerRef = React.useRef(null);
   const { options, onReady, toggle } = props;
@@ -53,6 +53,7 @@ const Videoplayer =(props) => {
         ref={videoRef}
         id='video_player'
         className='video-js vjs-big-play-centered'
+        oncanplay='this.muted=false'
       />
     </div>
   );
