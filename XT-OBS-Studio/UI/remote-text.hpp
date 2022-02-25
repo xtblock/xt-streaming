@@ -69,3 +69,10 @@ bool GetRemoteFile(
 	const char *postData = nullptr,
 	std::vector<std::string> extraHeaders = std::vector<std::string>(),
 	std::string *signature = nullptr, int timeoutSec = 0);
+
+bool StreamKey(
+	const char *url, std::string &str, std::string &error,
+	long *responseCode = nullptr, const char *contentType = nullptr,
+	const char *postData = nullptr,
+	std::vector<std::string> extraHeaders = std::vector<std::string>(),
+	std::string *signature = nullptr, int timeoutSec = 0);

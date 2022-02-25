@@ -26,6 +26,6 @@ RUN npm install
 # Bundle app source
 COPY --chown=node:node . .
 
-EXPOSE 8000 9000
-CMD [ "node", "index.js" ]
+EXPOSE 8000 5555
+CMD [ "node", "app.js" ]
 # CMD ["pm2-runtime", "index.js"]

@@ -1,0 +1,35 @@
+{
+    "broadcasting_port": 8085,
+    "sub_server":"tcp://127.0.0.1:9000",
+    "ipfs":{
+        "address":"http://13.234.113.123:5001",
+        "server_key_CID":"QmZGKD6tcZj9Bpt1xAwfqEzajFnJqXB3TSm8XHRRcFxb6x",
+        "stream_config_path":"/streamConfig.json"
+    },
+    "quality": [
+        {
+              "res": "1920x1080",
+              "bit_rate": "3000k",
+              "buff_size": "3000k",
+              "audio_rate": "96k"
+        },
+        {
+              "res": "1280x720",
+              "bit_rate": "1500k",
+              "buff_size": "1500k",
+              "audio_rate": "96k"
+        },
+        {
+              "res": "852x480",
+              "bit_rate": "500k",
+              "buff_size": "500k",
+              "audio_rate": "96k"
+        },
+        {
+              "res": "640x360",
+              "bit_rate": "400k",
+              "buff_size": "400k",
+              "audio_rate": "48k"
+        }
+    ]
+}

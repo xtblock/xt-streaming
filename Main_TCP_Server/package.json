@@ -1,11 +1,15 @@
 {
-  "name": "main_tcp_server",
+  "name": "main_server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "pkg": "^5.5.2"
+  }
 }

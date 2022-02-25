@@ -2,9 +2,8 @@ FROM  node:16.13.1-alpine
 
 # Install ffmpeg
 RUN apk add  --no-cache ffmpeg
-RUN apk update && apk add bash
-RUN apk add git
-RUN apk add curl
+RUN apk add --no-cache bash
+
 # set node user to un the application
 RUN mkdir -p /home/node/app/node_modules \
     && mkdir -p /home/node/settings \
@@ -12,6 +11,9 @@ RUN mkdir -p /home/node/app/node_modules \
     && chown -R node:node /home/node/app \
     && chown -R node:node /home/node/settings \
     && chown -R node:node /home/node/media
+
+
+
 # Create app directory
 WORKDIR /home/node/app
 
@@ -31,7 +33,9 @@ RUN npm install
 
 
 # Bundle app source
-COPY --chown=root:root . .
+COPY --chown=node:node . .
 
-EXPOSE 8080
-CMD [ "node", "index.js" ]
+EXPOSE 8085
+CMD [ "node", "app.js","--docker" ]
+
+# CMD ["pm2-runtime", "index.js"]

@@ -1,11 +1,16 @@
 {
-  "name": "sub_tcp_server",
+  "name": "sub_server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^10.0.1",
+    "ipfs-http-client": "^56.0.1",
+    "pkg": "^5.5.2"
+  }
 }
