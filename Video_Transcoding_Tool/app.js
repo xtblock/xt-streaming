@@ -19,12 +19,12 @@ const startApp =()=>{
             expressServer(mediaSavePath);
             const connectToSubServer = net.createConnection(
                 {
-                    host: new URL(config.sub_server).hostname,
-                    port: new URL(config.sub_server).port,
+                    host: new URL(config.tcp_server).hostname,
+                    port: new URL(config.tcp_server).port,
                 },
                 () => {
                     connectToSubServer.write(`TRANSCODING`);
-                    console.log(`connected to Sub Server ${new URL(config.sub_server).hostname}:${new URL(config.sub_server).port}\n`)
+                    console.log(`connected to TCP Server ${new URL(config.tcp_server).hostname}:${new URL(config.tcp_server).port}\n`)
                 },
             );
     
@@ -72,8 +72,8 @@ const startApp =()=>{
             ) => {
                 const dataReceiver = net.createConnection(
                     {
-                        host: new URL(config.sub_server).hostname,
-                        port: new URL(config.sub_server).port,
+                        host: new URL(config.tcp_server).hostname,
+                        port: new URL(config.tcp_server).port,
                     },
                     () => {
                         dataReceiver.write(`ffmpeg`);

@@ -1,5 +1,5 @@
 {
-  "name": "main_server",
+  "name": "tcp_server",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.3",
+    "fs-extra": "^10.0.1",
+    "ipfs-http-client": "^56.0.1",
     "pkg": "^5.5.2"
   }
 }

@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "channelName": "TestChannelOne",
+      "streamKey": "RePVlSnmjxjU5IYNHoPLT8Xt01ta/gKimm5m719tM4U=",
+      "streams": [
+        {
+          "streamingName": "VideoStream1",
+          "photo_thumbnail": "https://images.pexels.com/photos/459762/pexels-photo-459762.jpeg?cs=srgb&dl=pexels-pixabay-459762.jpg&fm=jpg",
+          "video_thumbnail": "/video uri/",
+          "started_timeStamp": "",
+          "ended_timeStamp": ""
+        }
+      ]
+    },
+    {
+      "channelName": "TestChannelTwo",
+      "streamKey": "yhIlLWjxh+Iald5oRF9W0gekW95kbtDrjHEY23EBgcQ=",
+      "streams": [
+        {
+          "streamingName": "VideoStream2",
+          "photo_thumbnail": "https://images.pexels.com/photos/1111597/pexels-photo-1111597.jpeg?cs=srgb&dl=pexels-lilartsy-1111597.jpg&fm=jpg",
+          "video_thumbnail": "/video uri/",
+          "started_timeStamp": "",
+          "ended_timeStamp": ""
+        }
+      ]
+    }
+  ]
+}

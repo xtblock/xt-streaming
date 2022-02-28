@@ -11,7 +11,6 @@ httpserver.listen(5555, '0.0.0.0', () => {
 
 const config = require('./settings/tcp_config.json');
 const { setPassword, createEncryptStream } = require('./aes-encrypt-stream');
-const e = require('express');
 
 const incomConn = [];
 const signalSocket = [];

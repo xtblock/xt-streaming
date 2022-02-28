@@ -1,7 +1,10 @@
 const {create } = require ('ipfs-http-client');
+const http= require('http');
 const config = require('./settings/transcoding_config.json')
 const fs = require('fs-extra');
-let IPFS= create(new URL(config.ipfs.address))
+let IPFS= create({ host: new URL(config.ipfs.address).hostname, port: new URL(config.ipfs.address).port, protocol: new URL(config.ipfs.address).protocol ,
+agent:http.Agent({ keepAlive: true, maxSockets: Infinity })
+});
 
 const downloadTCPServerKeys = async ( )=>{
 console.log(`downloading files from IPFS ....`)

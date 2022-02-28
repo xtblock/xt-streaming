@@ -10,30 +10,30 @@ const services = require('./services');
 const signalTranscoder = [];
 const transcoderDataForwarderSocket = {};
 const mainServerSocket = [];
-const subServerSocket =[];
+const subServerSocket = [];
 
 
 
 const startServer = () => {
 
-    const SUBServer = net.createServer().listen(config.port, '0.0.0.0', () => {
-        console.log(`\nSub_TCP_Server running at port : ${config.port}`)
+    const SUBServer = net.createServer().listen(config.tcp_port, '0.0.0.0', () => {
+        console.log(`\nSub_TCP_Server running at port : ${config.tcp_port}`)
     })
 
     const connectToMain = net.createConnection({
-        port: new URL(config.main_server).port,
-        host: new URL(config.main_server).hostname
+        port: new URL(config.tcp_forwarder).port,
+        host: new URL(config.tcp_forwarder).hostname
     }, () => {
-        connectToMain.write(`SUB:${config.port}/SUB_SERVER:${config.port}`);
+        connectToMain.write(`SUB:${config.tcp_port}/SUB_SERVER:${config.tcp_port}`);
 
-        console.log(`\nconnection has been established to ${new URL(config.main_server).port} `)
+        console.log(`\nconnection has been established to ${new URL(config.tcp_forwarder).port} `)
     })
 
     connectToMain.on('data', async (buffer) => {
         let bufferToString = buffer.toString();
         if (bufferToString.includes(`key:`)) {
             console.log(`\nVerifying streamKey : ${bufferToString.split(`key:`)[1]} .......`)
-            for (let sub of subServerSocket){
+            for (let sub of subServerSocket) {
                 sub.write(buffer)
             }
 
@@ -71,31 +71,31 @@ const startServer = () => {
 
 
     SUBServer.on('connection', (socket) => {
-        if (socket.remoteAddress === new URL(config.main_server).hostname) {
+        if (socket.remoteAddress === new URL(config.tcp_forwarder).hostname) {
             console.log(`\nConnection from Main Tcp Server`)
             mainServerSocket.push(socket);
-         for (let sub of subServerSocket){
-             console.log(sub.port)
-             const connect = net.createConnection({
-                 port : sub.port,
-                 host:sub.remoteAddress
-             })
-             socket.pipe(connect)
-         }
+            for (let sub of subServerSocket) {
+                console.log(sub.port)
+                const connect = net.createConnection({
+                    port: sub.port,
+                    host: sub.remoteAddress
+                })
+                socket.pipe(connect)
+            }
         }
 
 
         socket.on('data', (buffer) => {
-    
+
             let bufferToString = buffer.toString();
             if (bufferToString === `TRANSCODING`) {
                 console.log(`\nTranscoding Tool is connected Verifying Transcoding Tool .....`)
                 signalTranscoder.push(socket);
-                let serverInfo  = {
-                    
-                        server_name: config.tcp_name,
-                        server_pubicKey: config.tcp_server_key
-                    
+                let serverInfo = {
+
+                    server_name: config.tcp_name,
+                    server_pubicKey: config.tcp_server_key
+
                 }
                 transcoderDataForwarderSocket[socket.remoteAddress] = [];
                 socket.write(`Server_Info=${JSON.stringify(serverInfo)}`)
@@ -105,12 +105,12 @@ const startServer = () => {
                 console.log(`\nData forwarding is Established for ${socket.remoteAddress}`)
                 transcoderDataForwarderSocket[socket.remoteAddress].push(socket);
             }
-    
-            if(bufferToString.includes (`SUB_SERVER:`)){
-                console.log(`\nSub_Server is connected`,bufferToString)
-                socket.port =bufferToString.split('/')[1].split(`SUB_SERVER:`)[1];
+
+            if (bufferToString.includes(`SUB_SERVER:`)) {
+                console.log(`\nSub_Server is connected`, bufferToString)
+                socket.port = bufferToString.split('/')[1].split(`SUB_SERVER:`)[1];
                 subServerSocket.push(socket);
-                
+
             }
 
 
@@ -121,7 +121,7 @@ const startServer = () => {
                         transcoderDataForwarderSocket[sock.remoteAddress][index].write(buffer);
                     }
 
-                
+
                 }
             }
 
@@ -130,6 +130,11 @@ const startServer = () => {
 
 
         socket.on('close', () => {
+            if(signalTranscoder.includes(socket)){
+                console.log(`removing transcoding tool ${socket.remoteAddress}`)
+                signalTranscoder.splice(signalTranscoder.indexOf(socket),1);
+                delete transcoderDataForwarderSocket[ip]
+            }
             if (mainServerSocket.includes(socket)) {
                 console.log(`\n Stream is stopped removing socket...`);
                 socket.destroy();
@@ -138,6 +143,7 @@ const startServer = () => {
                     for (ip in transcoderDataForwarderSocket) {
                         if (transcoderDataForwarderSocket[ip][index]) {
                             transcoderDataForwarderSocket[ip][index].destroy();
+                            transcoderDataForwarderSocket[ip].splice(index, 1);
                         }
                     }
                 }

@@ -41,10 +41,10 @@ class Transcode {
         this.streamDetails.streams["live"]=true;
         this.streamDetails.streams["started_timeStamp"]= new Date().getTime()
     
-  const updated =  await services.updateToIpfs(this.streamDetails,'start' );
-  if(updated){
+  await services.updateToIpfs(this.streamDetails,'start' );
+
     io.emit('onStreamAdd','new stream added')
-  }
+
     
 
     // need to emit socket and update ipfs stream details

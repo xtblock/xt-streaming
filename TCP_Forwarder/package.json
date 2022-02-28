@@ -1,5 +1,5 @@
 {
-  "name": "sub_server",
+  "name": "tcp_forwarder",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -9,8 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fs-extra": "^10.0.1",
-    "ipfs-http-client": "^56.0.1",
+    "express": "^4.17.3",
     "pkg": "^5.5.2"
   }
 }
