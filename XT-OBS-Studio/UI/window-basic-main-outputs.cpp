@@ -1728,7 +1728,6 @@ printf("url: %s \n", ("http:"+std::string(token)+":8080/"+"query?"+std::string(k
     /* Perform the request, res will get the return code */
     res = curl_easy_perform(curl);
 
-	fprintf(CURLE_OK)
     /* Check for errors */
     if(res != CURLE_OK)
       fprintf(stderr, "curl_easy_perform() failed: %s\n",

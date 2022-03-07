@@ -12,6 +12,15 @@ const transcoderDataForwarderSocket = {};
 const mainServerSocket = [];
 const subServerSocket = [];
 
+let folderPath ;
+if(process.argv[2] === '--docker'){
+ 
+    folderPath= __dirname
+
+}else{
+    folderPath = path.dirname(process.execPath);
+  
+}
 
 
 const startServer = () => {
@@ -39,7 +48,7 @@ const startServer = () => {
 
 
             const streamKeys = await fs.readJSON(
-                path.join(__dirname, './streamKeys.json'),
+                path.join(folderPath,'downloads','streamKeys.json'),
             )
             const isValid = streamKeys.data.find(
                 (key) => key.streamkey === bufferToString.split(`key:`)[1]
@@ -164,9 +173,11 @@ const startServer = () => {
 
 
 async function start() {
-    const streamKeysDownloaded = await services.ipfs();
+fs.ensureDir(path.join(folderPath, 'downloads'))
+    
+    const streamKeysDownloaded = await services.ipfs(folderPath);
     const interval = setInterval(() => {
-        const fileExists = fs.pathExistsSync('./streamKeys.json')
+        const fileExists = fs.pathExistsSync(path.join(folderPath,'downloads','/streamKeys.json'))
 
         if (fileExists) {
             clearInterval(interval);

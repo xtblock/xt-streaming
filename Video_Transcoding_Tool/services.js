@@ -2,16 +2,19 @@ const {create } = require ('ipfs-http-client');
 const http= require('http');
 const config = require('./settings/transcoding_config.json')
 const fs = require('fs-extra');
+const path = require('path')
 let IPFS= create({ host: new URL(config.ipfs.address).hostname, port: new URL(config.ipfs.address).port, protocol: new URL(config.ipfs.address).protocol ,
 agent:http.Agent({ keepAlive: true, maxSockets: Infinity })
 });
 
-const downloadTCPServerKeys = async ( )=>{
+const downloadTCPServerKeys = async (downloadPath )=>{
 console.log(`downloading files from IPFS ....`)
 async function downloadJson (cid){
     for await(let file of IPFS.cat(cid)){
         const json = JSON.parse(file.toString())
-        await fs.writeJSON('./tcpServerKeys.json', json, { spaces: 2 })
+        console.log(path.join(downloadPath,'downloads','tcpServerKeys.json'),'+++++++++++++')
+        
+        await fs.writeJSON(path.join(downloadPath,'downloads','tcpServerKeys.json'), json, { spaces: 2 })
         return true
     }
 }

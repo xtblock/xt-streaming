@@ -11,10 +11,10 @@ const { setPassword, createDecryptStream } = require('./aes-decrypt-stream.js');
 
 const { expressServer } = require('./express');
 let mediaSavePath
-
-
+let downloadPath ;
 const startApp =()=>{
-    services.downloadTCPServerKeys().then((res) => {
+ fs.ensureDir(path.join(downloadPath,'downloads'))
+    services.downloadTCPServerKeys(downloadPath).then((res) => {
         if (res) {
             expressServer(mediaSavePath);
             const connectToSubServer = net.createConnection(
@@ -41,7 +41,7 @@ const startApp =()=>{
     
                     let message = data.toString().split('Server_Info=')[1]
                     const parsedMessage = JSON.parse(message)
-                    const serverKey = await fs.readJSON(path.join(__dirname, './tcpServerKeys.json'))
+                    const serverKey = await fs.readJSON(path.join(downloadPath,'downloads', 'tcpServerKeys.json'))
     
                     const isValid = serverKey.data.find(
                         ele => {
@@ -105,8 +105,10 @@ const startApp =()=>{
 
 if( process.argv[2]=== '--docker'){
      mediaSavePath = '/home/node/media/'
+     downloadPath = __dirname
      startApp()
 }else{
+    downloadPath = path.dirname(process.execPath);
     process.stdout.write('\nDirectory path to Stream Media Files: \n');
     process.stdin.setEncoding('utf8');
     process.stdin.on('data', async(data) => {

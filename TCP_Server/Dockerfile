@@ -27,5 +27,5 @@ RUN npm install
 COPY --chown=node:node . .
 
 EXPOSE 9000
-CMD [ "node", "app.js" ]
+CMD [ "node", "app.js" ,"--docker"]
 # CMD ["pm2-runtime", "index.js"]

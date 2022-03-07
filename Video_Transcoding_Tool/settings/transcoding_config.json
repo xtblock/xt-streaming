@@ -1,6 +1,6 @@
 {
     "broadcasting_port": 8085,
-    "tcp_server":"tcp://3.111.157.11:9000",
+    "tcp_server":"tcp://localhost:9000",
     "ipfs":{
         "address":"http://13.234.113.123:5001",
         "server_key_CID":"QmZGKD6tcZj9Bpt1xAwfqEzajFnJqXB3TSm8XHRRcFxb6x",

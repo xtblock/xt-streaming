@@ -20,7 +20,7 @@ class Transcode {
     const commands = await this.buildCommands();
     // const masterPlaylist = await this.writePlaylist();
 
-    const ls = (0, child_process_1.spawn)('ffmpeg', commands);
+    const ls = (0, child_process_1.spawn)('ffmpeg', commands,{detached:true});
 
     let showLogs = true;
     if (this.options.showLogs == false) {
